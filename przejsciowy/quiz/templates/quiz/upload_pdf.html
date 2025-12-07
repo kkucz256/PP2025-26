@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl">
+{% load static %}
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Pytań z PDF</title>
+    <link rel="stylesheet" href="{% static 'quiz/css/upload_pdf.css'%}">
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>Import Materiałów</h1>
+        </header>
+
+        <div class="panel upload-panel">
+            <h2>1. Wybierz plik</h2>
+            <form method="post" enctype="multipart/form-data" action="{% url 'upload_pdf_view' %}">
+                {% csrf_token %}
+                
+                <div class="drop-zone" id="drop-zone">
+                     <span class="drop-zone__prompt">Kliknij, aby wybrać nowy plik PDF</span>
+                    <input type="file" name="pdf_file" class="drop-zone__input" accept=".pdf" required>
+                </div>
+
+                <input type="hidden" name="action" value="extract">
+                <button type="submit" class="btn btn-primary">Wczytaj</button>
+            </form>
+            
+            {% if error %}
+            <div class="alert error">
+                {{ error }}
+            </div>
+            {% endif %}
+        </div>
+
+        {% if extracted_text and file_url %}
+        <div class="split-view">
+            
+            <div class="panel split-col">
+                <h2>2. Podgląd Oryginału</h2>
+                <embed src="{{ file_url }}" type="application/pdf" class="pdf-embed">
+            </div>
+
+            <div class="panel split-col">
+                <h2>3. Wyekstrahowany Tekst</h2>
+                <form method="post" action="{% url 'upload_pdf_view' %}" class="editor-form">
+                    {% csrf_token %}
+                    
+                    <textarea name="final_text" class="text-editor" spellcheck="false">{{ extracted_text }}</textarea>
+                    
+                    <input type="hidden" name="action" value="generate">
+                    <input type="hidden" name="filename_to_delete" value="{{ filename }}"> 
+
+                    <button type="submit" class="btn btn-success">Zatwierdź i Generuj Pytania</button>
+                </form>
+            </div>
+            
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="{% static 'quiz/js/upload_pdf.js' %}"></script>
+</body>
+</html>
