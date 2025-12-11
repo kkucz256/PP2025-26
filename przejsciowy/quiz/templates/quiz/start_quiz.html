@@ -1,0 +1,262 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Rozpocznij Nowy Quiz - QuizMaster{% endblock %}
+
+{% block content %}
+<div class="start-quiz-container">
+    <main class="config-main">
+        <header class="page-header">
+            <div class="greeting">
+                <h1>Rozpocznij Nowy Quiz 🧠</h1>
+                <p>Wybierz tryb i rozpocznij swoją przygodę z nauką</p>
+            </div>
+            <div class="progress-steps">
+                <span class="step active">1</span>
+                <span class="step">2</span>
+                <span class="step">3</span>
+            </div>
+        </header>
+
+        <section class="config-section">
+            <h3 class="section-title">Wybierz Tryb Quizu</h3>
+            <div class="mode-selection-grid">
+                <div class="mode-card" data-mode="solo">
+                    <i data-feather="user"></i>
+                    <h4>Quiz Solo</h4>
+                    <p>Ucz się w swoim tempie i śledź postępy</p>
+                    <div class="tags">
+                        <span class="tag">Bez presji czasu</span>
+                        <span class="tag">Własne tempo</span>
+                    </div>
+                </div>
+                <div class="mode-card" data-mode="timed">
+                    <i data-feather="clock"></i>
+                    <h4>Wyzwanie Czasowe</h4>
+                    <p>Sprawdź się pod presją czasu</p>
+                    <div class="tags">
+                        <span class="tag tag-orange">Limit czasu</span>
+                        <span class="tag tag-pink">Wysokie wyniki</span>
+                    </div>
+                </div>
+                <div class="mode-card" data-mode="multiplayer">
+                    <i data-feather="users"></i>
+                    <h4>Wielosobowy</h4>
+                    <p>Rywalizuj z znajomymi online</p>
+                    <div class="tags">
+                        <span class="tag tag-purple">Do 8 graczy</span>
+                        <span class="tag tag-green">Ranking</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="config-section">
+            <h3 class="section-title">Wybierz Notatki</h3>
+            <div class="notes-toolbar">
+                <div class="search-bar">
+                    <i data-feather="search"></i>
+                    <input type="text" placeholder="Szukaj w notatkach...">
+                </div>
+                <select class="filter-dropdown">
+                    <option>Wszystkie przedmioty</option>
+                    <option>Matematyka</option>
+                    <option>Fizyka</option>
+                    <option>Biologia</option>
+                </select>
+            </div>
+            <div class="notes-grid">
+                
+                <div class="note-card-big">
+                    <div class="note-card-header">
+                        <div class="note-card-icon"><i data-feather="divide-circle"></i></div>
+                        <h4>Matematyka - Pochodne</h4>
+                        <span class="tag tag-orange">Średni</span>
+                    </div>
+                    <p class="note-card-desc">Podstawowe wzory i funkcje pochodnych, reguły różniczkowania...</p>
+                    <div class="note-card-stats">
+                        <span><i data-feather="file-text"></i> 12 stron • 45 pojęć</span>
+                        <span><i data-feather="clock"></i> ~15 min</span>
+                        <span><i data-feather="check-circle"></i> Ostatni wynik: 87%</span>
+                    </div>
+                </div>
+
+                <div class="note-card-big selected">
+                    <div class="note-card-header">
+                        <div class="note-card-icon"><i data-feather="atom"></i></div>
+                        <h4>Fizyka Kwantowa</h4>
+                        <span class="tag tag-pink">Trudny</span>
+                    </div>
+                    <p class="note-card-desc">Podstawy mechaniki kwantowej, zasada nieoznaczoności, funkcje falowe...</p>
+                    <div class="note-card-stats">
+                        <span><i data-feather="file-text"></i> 8 stron • 32 pojęcia</span>
+                        <span><i data-feather="clock"></i> ~20 min</span>
+                        <span><i data-feather="check-circle"></i> Ostatni wynik: 76%</span>
+                    </div>
+                </div>
+
+                 <div class="note-card-big">
+                    <div class="note-card-header">
+                        <div class="note-card-icon"><i data-feather="leaf"></i></div>
+                        <h4>Biologia - Komórka</h4>
+                        <span class="tag tag-green">Łatwy</span>
+                    </div>
+                    <p class="note-card-desc">Budowa organelli komórkowych, transport przez błony...</p>
+                    <div class="note-card-stats">
+                        <span><i data-feather="file-text"></i> 10 stron • 38 pojęć</span>
+                        <span><i data-feather="clock"></i> ~12 min</span>
+                        <span><i data-feather="check-circle"></i> Ostatni wynik: 92%</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <aside class="config-sidebar">
+        <div class="settings-card">
+            <h3 class="section-title">Ustawienia Quizu</h3>
+            
+            <div class="setting">
+                <h4>Liczba Pytań</h4>
+                <div class="segmented-control">
+                    <button data-questions="10">10<p>Szybki test</p></button>
+                    <button data-questions="20">20<p>Standardowy</p></button>
+                    <button data-questions="30">30<p>Rozszerzony</p></button>
+                    <button data-questions="all">Wszystkie<p>Kompletny</p></button>
+                </div>
+            </div>
+
+            <div class="setting">
+                <h4>Poziom Trudności</h4>
+                <div class="radio-group">
+                    <label><input type="radio" name="difficulty" value="easy"> <span>Łatwy</span><p>Podstawowe pojęcia</p></label>
+                    <label><input type="radio" name="difficulty" value="medium"> <span>Średni</span><p>Mieszane pytania</p></label>
+                    <label><input type="radio" name="difficulty" value="hard"> <span>Trudny</span><p>Zaawansowane</p></label>
+                </div>
+            </div>
+
+            <div class="setting">
+                <h4>Dodatkowe Opcje</h4>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="random-order-checkbox"> Losowa kolejność pytań</label>
+                    <label><input type="checkbox"> Pokaż podpowiedzi</label>
+                    <label><input type="checkbox" checked> Natychmiastowa informacja zwrotna</label>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <h4>Podsumowanie</h4>
+                <ul>
+                    <li><strong>Tryb:</strong> <span>Quiz Solo</span></li>
+                    <li><strong>Notatki:</strong> <span>Fizyka Kwantowa</span></li>
+                    <li><strong>Pytania:</strong> <span>20 pytań</span></li>
+                    <li><strong>Trudność:</strong> <span>Średni</span></li>
+                    <li><strong>Czas:</strong> <span>~20 minut</span></li>
+                </ul>
+            </div>
+            
+            <button class="btn btn-primary btn-full-width">
+                <i data-feather="play"></i>
+                Rozpocznij Quiz
+            </button>
+            <a href="{% url 'quiz:main_menu' %}" class="back-link">
+                <i data-feather="arrow-left"></i>
+                Powrót do Dashboard
+            </a>
+        </div>
+    </aside>
+</div><script>
+document.addEventListener('DOMContentLoaded', function () {
+    // --- Funkcja do obsługi przełączania klas ---
+    function setupSelection(containerSelector, itemSelector, activeClass = 'selected') {
+        const container = document.querySelector(containerSelector);
+        if (container) {
+            const items = container.querySelectorAll(itemSelector);
+            container.addEventListener('click', function (e) {
+                const clickedItem = e.target.closest(itemSelector);
+                if (clickedItem && !clickedItem.classList.contains(activeClass)) {
+                    // Usuń klasę z wszystkich elementów w tej grupie
+                    items.forEach(item => item.classList.remove(activeClass));
+                    // Dodaj klasę do klikniętego elementu
+                    clickedItem.classList.add(activeClass);
+                }
+            });
+        }
+    }
+
+    // --- Inicjalizacja dla poszczególnych sekcji ---
+    setupSelection('.mode-selection-grid', '.mode-card', 'selected');
+    setupSelection('.notes-grid', '.note-card-big', 'selected');
+    setupSelection('.segmented-control', 'button', 'active');
+
+    // --- Funkcja do ustawiania opcji z URL ---
+    function applySettingsFromURL() {
+        const params = new URLSearchParams(window.location.search);
+
+        const mode = params.get('mode');
+        const questions = params.get('questions');
+        const difficulty = params.get('difficulty');
+        const random = params.get('random');
+
+        // Jeśli nie ma parametrów, nic nie rób
+        if (!mode && !questions && !difficulty && !random) {
+            // Ustaw domyślne zaznaczenia, jeśli nie ma parametrów
+            const defaultMode = document.querySelector('.mode-card[data-mode="solo"]');
+            if (defaultMode) defaultMode.classList.add('selected');
+            
+            const defaultQuestions = document.querySelector('.segmented-control button[data-questions="20"]');
+            if (defaultQuestions) defaultQuestions.classList.add('active');
+
+            const defaultDifficulty = document.querySelector('input[name="difficulty"][value="medium"]');
+            if (defaultDifficulty) defaultDifficulty.checked = true;
+            
+            return;
+        }
+
+        // Usuń domyślne zaznaczenia
+        document.querySelectorAll('.mode-card.selected').forEach(el => el.classList.remove('selected'));
+        document.querySelectorAll('.segmented-control button.active').forEach(el => el.classList.remove('active'));
+        const checkedRadio = document.querySelector('input[name="difficulty"]:checked');
+        if(checkedRadio) checkedRadio.checked = false;
+
+
+        // Ustaw tryb
+        if (mode) {
+            const modeCard = document.querySelector(`.mode-card[data-mode="${mode}"]`);
+            if (modeCard) modeCard.classList.add('selected');
+        }
+
+        // Ustaw liczbę pytań
+        if (questions) {
+            const questionButton = document.querySelector(`.segmented-control button[data-questions="${questions}"]`);
+            if (questionButton) questionButton.classList.add('active');
+        }
+
+        // Ustaw poziom trudności
+        if (difficulty) {
+            const difficultyRadio = document.querySelector(`input[name="difficulty"][value="${difficulty}"]`);
+            if (difficultyRadio) difficultyRadio.checked = true;
+        }
+
+        // Ustaw losową kolejność pytań
+        const randomCheckbox = document.getElementById('random-order-checkbox');
+        if (randomCheckbox) {
+            // Najpierw usuń domyślne zaznaczenie (jeśli istnieje) z innego checkboxa
+            const defaultCheckedBox = document.querySelector('.checkbox-group input[type="checkbox"]:checked');
+             if(defaultCheckedBox && defaultCheckedBox.id !== 'random-order-checkbox'){
+                // zostawiamy inne checkboxy w spokoju jesli nie sa tym docelowym
+             }
+
+            if (random === 'true') {
+                randomCheckbox.checked = true;
+            } else if (random === 'false') {
+                randomCheckbox.checked = false;
+            }
+        }
+    }
+
+    applySettingsFromURL();
+});
+</script>
+{% endblock %}

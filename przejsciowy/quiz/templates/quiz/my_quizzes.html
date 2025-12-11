@@ -1,0 +1,212 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Moje Quizy - QuizMaster{% endblock %}
+
+{% block content %}
+<div class="my-quizzes-container">
+    <header class="page-header">
+        <div class="greeting">
+            <h1><i data-feather="trello" class="page-icon"></i> Moje Quizy</h1>
+            <p>Zarządzaj swoimi quizami i śledź postępy</p>
+        </div>
+        <div class="header-actions">
+             <div class="header-actions">
+                <button class="btn btn-primary"><i data-feather="plus"></i> Nowy Quiz</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="stats-grid quizzes-stats-grid">
+        <div class="stat-card card-blue">
+            <i data-feather="file-text"></i>
+            <h2>36</h2>
+            <p>Wszystkie Quizy</p>
+        </div>
+        <div class="stat-card card-green">
+            <i data-feather="check-circle"></i>
+            <h2>0</h2>
+            <p>Ukończone</p>
+        </div>
+        <div class="stat-card card-orange">
+            <i data-feather="clock"></i>
+            <h2>8</h2>
+            <p>W Trakcie</p>
+        </div>
+        <div class="stat-card card-purple">
+            <i data-feather="bookmark"></i>
+            <h2>4</h2>
+            <p>Zapisane</p>
+        </div>
+    </div>
+
+    <div class="quizzes-page-toolbar">
+        <div class="search-bar">
+            <i data-feather="search"></i>
+            <input type="text" placeholder="Szukaj quizów...">
+        </div>
+        <div class="toolbar-actions">
+            <button class="btn-secondary"><i data-feather="filter"></i> Filtruj</button>
+            <button class="btn-secondary"><i data-feather="arrow-up-down"></i> Sortuj</button>
+        </div>
+    </div>
+    
+    <div class="filter-tabs-quizzes">
+        <button class="tab-button active">Wszystkie</button>
+        <button class="tab-button">Ukończone</button>
+        <button class="tab-button">W trakcie</button>
+        <button class="tab-button">Zapisane</button>
+        <span class="divider"></span>
+        <button class="tab-button">Matematyka</button>
+        <button class="tab-button">Języki</button>
+        <button class="tab-button">Nauki ścisłe</button>
+    </div>
+
+    <div class="quizzes-content-grid">
+        <!-- Przykładowy quiz 1 -->
+        <div class="quiz-card">
+            <div class="quiz-card-header">
+                <div class="quiz-icon icon-blue"><i data-feather="book-open"></i></div>
+                <h4>Historia Polski</h4>
+                <div class="quiz-score score-green">92%</div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+            <p class="quiz-desc">Najważniejsze wydarzenia w historii Polski od średniowiecza do czasów współczesnych.</p>
+            <div class="quiz-details">
+                <span><i data-feather="help-circle"></i> 20 pytań</span>
+                <span><i data-feather="clock"></i> 15 min</span>
+                <span><i data-feather="trending-up"></i> Średni</span>
+            </div>
+            <div class="quiz-footer">
+                <span class="completion-date">Ukończono 2 dni temu</span>
+                <a href="#" class="btn-link">Powtórz <i data-feather="refresh-cw"></i></a>
+            </div>
+        </div>
+
+        <!-- Przykładowy quiz 2 -->
+        <div class="quiz-card">
+            <div class="quiz-card-header">
+                <div class="quiz-icon icon-purple"><i data-feather="codesandbox"></i></div>
+                <h4>Fizyka Kwantowa</h4>
+                <div class="quiz-score score-yellow">78%</div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+            <p class="quiz-desc">Podstawy mechaniki kwantowej, teoria falowa i zasada nieoznaczoności.</p>
+            <div class="quiz-details">
+                <span><i data-feather="help-circle"></i> 15 pytań</span>
+                <span><i data-feather="clock"></i> 18 min</span>
+                <span><i data-feather="trending-up"></i> Trudny</span>
+            </div>
+            <div class="quiz-footer">
+                <span class="completion-date">Ukończono 5 dni temu</span>
+                <a href="#" class="btn-link">Powtórz <i data-feather="refresh-cw"></i></a>
+            </div>
+        </div>
+
+        <!-- Przykładowy quiz 3 -->
+        <div class="quiz-card">
+            <div class="quiz-card-header">
+                <div class="quiz-icon icon-pink"><i data-feather="award"></i></div>
+                <h4>Angielski B2</h4>
+                <div class="quiz-score score-green">95%</div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+            <p class="quiz-desc">Gramatyka, słownictwo i idiomy na poziomie upper-intermediate.</p>
+            <div class="quiz-details">
+                <span><i data-feather="help-circle"></i> 25 pytań</span>
+                <span><i data-feather="clock"></i> 22 min</span>
+                <span><i data-feather="trending-up"></i> Średni</span>
+            </div>
+            <div class="quiz-footer">
+                <span class="completion-date">Ukończono 1 tydzień temu</span>
+                <a href="#" class="btn-link">Powtórz <i data-feather="refresh-cw"></i></a>
+            </div>
+        </div>
+
+        <!-- Przykładowy quiz 4 (W trakcie) -->
+        <div class="quiz-card in-progress">
+            <div class="quiz-card-header">
+                <div class="quiz-icon icon-orange"><i data-feather="divide-circle"></i></div>
+                <h4>Matematyka - Pochodne</h4>
+                <div class="quiz-status">W trakcie</div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+            <p class="quiz-desc">Definicje, wzory i zastosowania pochodnych funkcji.</p>
+            <div class="quiz-details">
+                <span><i data-feather="help-circle"></i> 18 pytań</span>
+                <span><i data-feather="clock"></i> 20 min</span>
+                <span><i data-feather="trending-up"></i> Średni</span>
+            </div>
+            <div class="quiz-footer">
+                <div class="progress-bar">
+                    <div class="progress" style="width: 67%;"></div>
+                </div>
+                <span class="progress-text">Postęp: 12/18</span>
+                <div class="quiz-score-alt">67%</div>
+            </div>
+        </div>
+
+        <!-- Przykładowy quiz 5 (W trakcie) -->
+        <div class="quiz-card in-progress">
+             <div class="quiz-card-header">
+                <div class="quiz-icon icon-green"><i data-feather="flask-conical"></i></div>
+                <h4>Chemia Organiczna</h4>
+                <div class="quiz-status">W trakcie</div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+            <p class="quiz-desc">Węglowodory, grupy funkcyjne i reakcje podstawienia.</p>
+            <div class="quiz-details">
+                <span><i data-feather="help-circle"></i> 22 pytań</span>
+                <span><i data-feather="clock"></i> 25 min</span>
+                <span><i data-feather="trending-up"></i> Trudny</span>
+            </div>
+            <div class="quiz-footer">
+                <div class="progress-bar">
+                    <div class="progress" style="width: 88%;"></div>
+                </div>
+                <span class="progress-text">Ukończono 3 dni temu</span>
+                <div class="quiz-score-alt">88%</div>
+            </div>
+        </div>
+
+        <!-- Przykładowy quiz 6 (W trakcie) -->
+        <div class="quiz-card in-progress">
+            <div class="quiz-card-header">
+                <div class="quiz-icon icon-blue"><i data-feather="git-branch"></i></div>
+                <h4>Biologia - Genetyka</h4>
+                <div class="quiz-status">W trakcie</div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+            <p class="quiz-desc">DNA, RNA, transkrypcja i translacja materiału genetycznego.</p>
+            <div class="quiz-details">
+                <span><i data-feather="help-circle"></i> 20 pytań</span>
+                <span><i data-feather="clock"></i> 18 min</span>
+                <span><i data-feather="trending-up"></i> Średni</span>
+            </div>
+            <div class="quiz-footer">
+                <div class="progress-bar">
+                    <div class="progress" style="width: 40%;"></div>
+                </div>
+                <span class="progress-text">Postęp: 8/20</span>
+                <div class="quiz-score-alt">40%</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Przełączanie filtrów
+    const filterTabs = document.querySelector('.filter-tabs-quizzes');
+    if(filterTabs) {
+        const buttons = filterTabs.querySelectorAll('.tab-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

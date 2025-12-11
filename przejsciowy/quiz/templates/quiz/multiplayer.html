@@ -1,0 +1,174 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Tryb Wieloosobowy - QuizMaster{% endblock %}
+
+{% block content %}
+<div class="multiplayer-container">
+    <header class="page-header">
+        <div class="greeting">
+            <h1><i data-feather="users" class="page-icon"></i> Tryb Wieloosobowy 🎮</h1>
+            <p>Rywalizuj z przyjaciółmi i innymi graczami online</p>
+        </div>
+        <div class="header-actions">
+            <div class="online-indicator">
+                <span class="dot"></span> 1,247 graczy online
+            </div>
+            <button class="btn btn-primary"><i data-feather="plus"></i> Stwórz Pokój</button>
+        </div>
+    </header>
+
+    <section class="config-section">
+        <h3 class="section-title">Wybierz Tryb Gry</h3>
+        <div class="multiplayer-mode-grid">
+            <a href="{% url 'quiz:start_quiz' %}?mode=solo&questions=10&difficulty=medium&random=true" class="mp-mode-card blue">
+                <i data-feather="zap"></i>
+                <h4>Szybka Gra</h4>
+                <p>Dołącz do losowego pokoju i zacznij grać natychmiast</p>
+                <div class="mp-tags">
+                    <span><i data-feather="users"></i> 2-8 graczy</span>
+                    <span><i data-feather="clock"></i> 5-10 min</span>
+                </div>
+            </a>
+            <a href="{% url 'quiz:start_quiz' %}" class="mp-mode-card purple">
+                <i data-feather="user-plus"></i>
+                <h4>Gra Prywatna</h4>
+                <p>Stwórz prywatny pokój i zaproś znajomych</p>
+                 <div class="mp-tags">
+                    <span><i data-feather="users"></i> 2-20 graczy</span>
+                    <span><i data-feather="lock"></i> Dowolnie</span>
+                </div>
+            </a>
+            <a href="{% url 'quiz:start_quiz' %}" class="mp-mode-card orange">
+                <i data-feather="award"></i>
+                <h4>Turniej</h4>
+                <p>Weź udział w rankingowych rozgrywkach</p>
+                 <div class="mp-tags">
+                    <span><i data-feather="users"></i> 8-32 graczy</span>
+                    <span><i data-feather="clock"></i> 30-60 min</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="active-rooms-section">
+        <div class="section-header">
+            <h3 class="section-title">Aktywne Pokoje</h3>
+            <div class="rooms-filter-bar">
+                 <div class="search-bar">
+                    <i data-feather="search"></i>
+                    <input type="text" placeholder="Szukaj pokoju...">
+                </div>
+                 <select class="filter-dropdown">
+                    <option>Wszystkie</option>
+                    <option>Historia</option>
+                    <option>Matematyka</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="rooms-list">
+            <!-- Pokój 1 -->
+            <div class="room-item">
+                <div class="room-details">
+                    <h4 class="room-title">Historia Polski - Bitwy</h4>
+                    <div class="room-meta">
+                        <span><i data-feather="book"></i> Historia</span>
+                        <span><i data-feather="bar-chart-2"></i> Średni</span>
+                        <span><i data-feather="clock"></i> 15 min</span>
+                    </div>
+                     <div class="room-players">
+                        <img src="https://i.pravatar.cc/24?u=1" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=2" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=3" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=4" alt="avatar">
+                    </div>
+                </div>
+                <div class="room-status-wrapper">
+                    <div class="room-status status-open">OTWARTE</div>
+                    <div class="room-player-count"><strong>4/8</strong> graczy</div>
+                </div>
+                <div class="room-join">
+                    <button class="btn btn-primary">Dołącz</button>
+                </div>
+            </div>
+            
+            <!-- Pokój 2 -->
+            <div class="room-item">
+                <div class="room-details">
+                    <h4 class="room-title">Matematyka - Pochodne</h4>
+                    <div class="room-meta">
+                        <span><i data-feather="book"></i> Matematyka</span>
+                        <span><i data-feather="bar-chart-2"></i> Trudny</span>
+                        <span><i data-feather="clock"></i> 20 min</span>
+                    </div>
+                     <div class="room-players">
+                        <img src="https://i.pravatar.cc/24?u=5" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=6" alt="avatar">
+                    </div>
+                </div>
+                 <div class="room-status-wrapper">
+                    <div class="room-status status-open">OTWARTE</div>
+                    <div class="room-player-count"><strong>2/6</strong> graczy</div>
+                </div>
+                <div class="room-join">
+                    <button class="btn btn-primary">Dołącz</button>
+                </div>
+            </div>
+
+            <!-- Pokój 3 -->
+             <div class="room-item">
+                <div class="room-details">
+                    <h4 class="room-title">Angielski B2 - Vocabulary</h4>
+                    <div class="room-meta">
+                        <span><i data-feather="book"></i> Angielski</span>
+                        <span><i data-feather="bar-chart-2"></i> Średni</span>
+                        <span><i data-feather="clock"></i> 12 min</span>
+                    </div>
+                     <div class="room-players">
+                        <img src="https://i.pravatar.cc/24?u=7" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=8" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=9" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=10" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=11" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=12" alt="avatar">
+                         <div class="player-avatar more">+3</div>
+                    </div>
+                </div>
+                 <div class="room-status-wrapper">
+                    <div class="room-status status-almost-full">PRAWIE PEŁNE</div>
+                    <div class="room-player-count"><strong>7/8</strong> graczy</div>
+                </div>
+                <div class="room-join">
+                    <button class="btn btn-primary">Dołącz</button>
+                </div>
+            </div>
+
+             <!-- Pokój 4 -->
+             <div class="room-item">
+                <div class="room-details">
+                    <h4 class="room-title">Fizyka Kwantowa - Zaawansowane</h4>
+                    <div class="room-meta">
+                        <span><i data-feather="book"></i> Fizyka</span>
+                        <span><i data-feather="bar-chart-2"></i> Ekspert</span>
+                        <span><i data-feather="clock"></i> 25 min</span>
+                    </div>
+                     <div class="room-players">
+                        <img src="https://i.pravatar.cc/24?u=13" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=14" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=15" alt="avatar">
+                        <img src="https://i.pravatar.cc/24?u=16" alt="avatar">
+                    </div>
+                </div>
+                 <div class="room-status-wrapper">
+                    <div class="room-status status-in-game">W GRZE</div>
+                    <div class="room-player-count"><strong>4/4</strong> graczy</div>
+                </div>
+                <div class="room-join">
+                    <button class="btn btn-secondary disabled" disabled>Pełny</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

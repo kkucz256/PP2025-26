@@ -1,0 +1,154 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Statystyki - QuizMaster{% endblock %}
+
+{% block content %}
+<div class="statistics-container">
+    <header class="page-header">
+        <div class="greeting">
+            <h1><i data-feather="bar-chart-2" class="page-icon"></i> Statystyki</h1>
+            <p>Śledź swoje postępy i osiągnięcia</p>
+        </div>
+        <div class="header-actions">
+            <select class="filter-dropdown">
+                <option>Ostatnie 7 dni</option>
+                <option>Ostatnie 30 dni</option>
+                <option>Cały okres</option>
+            </select>
+            <button class="btn btn-secondary"><i data-feather="download"></i> Eksportuj</button>
+        </div>
+    </header>
+
+    <div class="stats-grid-5">
+        <div class="stat-card-mini blue">
+            <h4>87%</h4>
+            <p>Średni Wynik</p>
+            <div class="stat-badge">+15%</div>
+        </div>
+        <div class="stat-card-mini green">
+            <h4>124</h4>
+            <p>Ukończone Quizy</p>
+            <div class="stat-badge">+8</div>
+        </div>
+        <div class="stat-card-mini purple">
+            <h4>15.3h</h4>
+            <p>Czas Nauki</p>
+            <div class="stat-badge">24h</div>
+        </div>
+        <div class="stat-card-mini orange">
+            <h4>12</h4>
+            <p>Dni z Rzędu</p>
+            <i data-feather="zap"></i>
+        </div>
+        <div class="stat-card-mini pink">
+            <h4>45</h4>
+            <p>Osiągnięcia</p>
+            <div class="stat-badge">Top 5%</div>
+        </div>
+    </div>
+
+    <div class="stats-main-grid">
+        <div class="stats-module subjects-results">
+            <h3 class="section-title">Wyniki według Przedmiotów</h3>
+            <ul class="subjects-list">
+                <li>
+                    <div class="subject-info">
+                        <span>Matematyka</span>
+                        <span><strong>18</strong> quizów ukończonych</span>
+                    </div>
+                    <div class="subject-score">94%</div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 94%; background-color: var(--blue);"></div></div>
+                </li>
+                 <li>
+                    <div class="subject-info">
+                        <span>Historia</span>
+                        <span><strong>24</strong> quizy ukończone</span>
+                    </div>
+                    <div class="subject-score">89%</div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 89%; background-color: var(--green);"></div></div>
+                </li>
+                 <li>
+                    <div class="subject-info">
+                        <span>Fizyka</span>
+                        <span><strong>10</strong> quizów ukończonych</span>
+                    </div>
+                    <div class="subject-score">82%</div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 82%; background-color: var(--purple);"></div></div>
+                </li>
+                 <li>
+                    <div class="subject-info">
+                        <span>Biologia</span>
+                        <span><strong>12</strong> quizów ukończonych</span>
+                    </div>
+                    <div class="subject-score">78%</div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 78%; background-color: var(--pink);"></div></div>
+                </li>
+                 <li>
+                    <div class="subject-info">
+                        <span>Chemia</span>
+                        <span><strong>9</strong> quizów ukończonych</span>
+                    </div>
+                    <div class="subject-score">75%</div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 75%; background-color: var(--orange);"></div></div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="stats-side-column">
+            <div class="stats-module weekly-activity">
+                <h3 class="section-title">Aktywność w Tygodniu</h3>
+                <!-- Placeholder for heatmap -->
+                <div class="heatmap-placeholder">
+                    <p>Wizualizacja aktywności w tygodniu</p>
+                </div>
+            </div>
+            <div class="stats-module difficulty-distribution">
+                <h3 class="section-title">Rozkład Trudności</h3>
+                <!-- Placeholder for donut chart -->
+                <div class="donutchart-placeholder">
+                    <p>Wykres kołowy trudności</p>
+                </div>
+                 <div class="legend">
+                    <span><span class="dot-legend green"></span> Łatwy</span>
+                    <span><span class="dot-legend orange"></span> Średni</span>
+                    <span><span class="dot-legend pink"></span> Trudny</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="stats-module achievements-section">
+        <div class="section-header">
+            <h3 class="section-title">Ostatnie Osiągnięcia</h3>
+            <a href="#" class="see-all">Zobacz wszystkie <i data-feather="arrow-right"></i></a>
+        </div>
+        <div class="achievements-grid">
+            <div class="achievement-card">
+                <div class="ach-icon yellow"><i data-feather="award"></i></div>
+                <h4>Pierwsza Setka</h4>
+                <p>Ukończyłeś 100 quizów!</p>
+                <small>2 dni temu</small>
+            </div>
+             <div class="achievement-card">
+                <div class="ach-icon blue"><i data-feather="sun"></i></div>
+                <h4>Gorąca Passa</h4>
+                <p>10 dni z rzędu!</p>
+                <small>Wczoraj</small>
+            </div>
+             <div class="achievement-card">
+                <div class="ach-icon purple"><i data-feather="target"></i></div>
+                <h4>Mistrz Fizyki</h4>
+                <p>95% w trudnym quizie</p>
+                <small>3 dni temu</small>
+            </div>
+             <div class="achievement-card">
+                <div class="ach-icon green"><i data-feather="zap"></i></div>
+                <h4>Błyskawica</h4>
+                <p>Quiz w rekordowym czasie</p>
+                <small>5 dni temu</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,232 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Moje Notatki - QuizMaster{% endblock %}
+
+{% block content %}
+<div class="my-notes-container">
+    <header class="page-header">
+        <div class="greeting">
+            <h1><i data-feather="book-open" class="page-icon"></i> Moje Notatki</h1>
+            <p>Zarządzaj swoimi materiałami do nauki</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'quiz:upload_pdf_view' %}" class="btn btn-icon-secondary"><i data-feather="upload"></i></a>
+            <button class="btn btn-primary"><i data-feather="plus"></i> Nowa Notatka</button>
+        </div>
+    </header>
+
+    <div class="stats-grid notes-stats-grid">
+        <div class="stat-card card-blue">
+            <i data-feather="file-text"></i>
+            <h2>48</h2>
+            <p>Wszystkich Notatek</p>
+        </div>
+        <div class="stat-card card-purple">
+            <i data-feather="folder"></i>
+            <h2>8</h2>
+            <p>Kategorii</p>
+        </div>
+        <div class="stat-card card-pink">
+            <i data-feather="clock"></i>
+            <h2>12</h2>
+            <p>Ostatni tydzień</p>
+        </div>
+        <div class="stat-card card-orange">
+            <i data-feather="star"></i>
+            <h2>15</h2>
+            <p>Ulubionych</p>
+        </div>
+    </div>
+
+    <div class="notes-page-toolbar">
+        <div class="search-bar">
+            <i data-feather="search"></i>
+            <input type="text" placeholder="Wyszukaj w notatkach...">
+        </div>
+        <div class="filter-tabs">
+            <span>Filtruj:</span>
+            <button class="tab-button active">Wszystkie</button>
+            <button class="tab-button">Matematyka</button>
+            <button class="tab-button">Nauki ścisłe</button>
+            <button class="tab-button">Języki</button>
+        </div>
+        <div class="view-toggle">
+            <button class="btn-icon-secondary active"><i data-feather="grid"></i></button>
+            <button class="btn-icon-secondary"><i data-feather="list"></i></button>
+        </div>
+    </div>
+
+    <div class="notes-content-grid">
+        <!-- Przykładowa notatka 1 -->
+        <div class="note-card-detailed">
+            <div class="note-card-detailed-header">
+                <div class="note-title">
+                    <div class="note-icon orange"><i data-feather="divide-circle"></i></div>
+                    <h4>Matematyka - Pochodne</h4>
+                </div>
+                <div class="note-actions">
+                    <button class="btn-fav active"><i data-feather="star"></i></button>
+                    <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+                </div>
+            </div>
+            <div class="note-tags">
+                <span class="tag tag-orange-light">Matematyka</span>
+                <span class="tag tag-blue-light">Analiza</span>
+            </div>
+            <p class="note-desc">Podstawowe wzory i definicje pochodnych funkcji. Reguła iloczynu, ilorazu oraz funkcji złożonej. Przykłady praktyczne obliczania.</p>
+            <div class="note-footer">
+                <div class="note-stats">
+                    <span><i data-feather="file-text"></i> 12 stron</span>
+                    <span><i data-feather="clock"></i> Wczoraj</span>
+                </div>
+                <button class="btn btn-primary-light"><i data-feather="play"></i> Quiz</button>
+            </div>
+        </div>
+
+        <!-- Przykładowa notatka 2 -->
+        <div class="note-card-detailed">
+            <div class="note-card-detailed-header">
+                <div class="note-title">
+                    <div class="note-icon blue"><i data-feather="git-branch"></i></div>
+                    <h4>Biologia - Komórka</h4>
+                </div>
+                <div class="note-actions">
+                    <button class="btn-fav"><i data-feather="star"></i></button>
+                    <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+                </div>
+            </div>
+            <div class="note-tags">
+                <span class="tag tag-green-light">Biologia</span>
+                <span class="tag tag-purple-light">Podstawy</span>
+            </div>
+            <p class="note-desc">Budowa i funkcje organelli komórkowych. Różnice między komórkami prokariotycznymi i eukariotycznymi.</p>
+            <div class="note-footer">
+                <div class="note-stats">
+                    <span><i data-feather="file-text"></i> 8 stron</span>
+                    <span><i data-feather="clock"></i> 3 dni temu</span>
+                </div>
+                <button class="btn btn-primary-light"><i data-feather="play"></i> Quiz</button>
+            </div>
+        </div>
+
+        <!-- Przykładowa notatka 3 -->
+        <div class="note-card-detailed">
+            <div class="note-card-detailed-header">
+                <div class="note-title">
+                    <div class="note-icon purple"><i data-feather="flask-conical"></i></div>
+                    <h4>Chemia - Reakcje</h4>
+                </div>
+                <div class="note-actions">
+                    <button class="btn-fav active"><i data-feather="star"></i></button>
+                    <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+                </div>
+            </div>
+            <div class="note-tags">
+                <span class="tag tag-purple-light">Chemia</span>
+                <span class="tag tag-pink-light">Reakcje</span>
+            </div>
+            <p class="note-desc">Typy reakcji chemicznych i ich równania. Bilansowanie równań, stechiometria, prawa zachowania masy. Kataliza i czynniki.</p>
+            <div class="note-footer">
+                <div class="note-stats">
+                    <span><i data-feather="file-text"></i> 15 stron</span>
+                    <span><i data-feather="clock"></i> 1 tydzień temu</span>
+                </div>
+                <button class="btn btn-primary-light"><i data-feather="play"></i> Quiz</button>
+            </div>
+        </div>
+
+        <!-- Przykładowa notatka 4 -->
+        <div class="note-card-detailed">
+            <div class="note-card-detailed-header">
+                <div class="note-title">
+                    <div class="note-icon green"><i data-feather="globe"></i></div>
+                    <h4>Geografia - Klimat</h4>
+                </div>
+                <div class="note-actions">
+                    <button class="btn-fav"><i data-feather="star"></i></button>
+                    <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+                </div>
+            </div>
+            <div class="note-tags">
+                <span class="tag tag-green-light">Geografia</span>
+                <span class="tag tag-blue-light">Klimat</span>
+            </div>
+            <p class="note-desc">Strefy klimatyczne i ich charakterystyka. Czynniki kształtujące klimat, cyrkulacja atmosferyczna, zjawiska pogodowe. Wpływ klimatu na życie.</p>
+             <div class="note-footer">
+                <div class="note-stats">
+                    <span><i data-feather="file-text"></i> 10 stron</span>
+                    <span><i data-feather="clock"></i> 2 tygodnie temu</span>
+                </div>
+                <button class="btn btn-primary-light"><i data-feather="play"></i> Quiz</button>
+            </div>
+        </div>
+
+        <!-- Przykładowa notatka 5 -->
+        <div class="note-card-detailed">
+             <div class="note-card-detailed-header">
+                <div class="note-title">
+                    <div class="note-icon pink"><i data-feather="message-circle"></i></div>
+                    <h4>Angielski B2</h4>
+                </div>
+                <div class="note-actions">
+                    <button class="btn-fav"><i data-feather="star"></i></button>
+                    <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+                </div>
+            </div>
+            <div class="note-tags">
+                <span class="tag tag-pink-light">Angielski</span>
+                <span class="tag tag-yellow-light">B2</span>
+            </div>
+            <p class="note-desc">Zaawansowana gramatyka angielska poziom B2. Czasy przeszłe, tryby warunkowe, strona bierna. Słownictwo i idiomy.</p>
+            <div class="note-footer">
+                <div class="note-stats">
+                    <span><i data-feather="file-text"></i> 25 stron</span>
+                    <span><i data-feather="clock"></i> 1 miesiąc temu</span>
+                </div>
+                <button class="btn btn-primary-light"><i data-feather="play"></i> Quiz</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Przełączanie filtrów
+    const filterTabs = document.querySelector('.filter-tabs');
+    if(filterTabs) {
+        const buttons = filterTabs.querySelectorAll('.tab-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    }
+
+    // Przełączanie widoku
+    const viewToggle = document.querySelector('.view-toggle');
+    if(viewToggle) {
+        const buttons = viewToggle.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                // Tutaj można dodać logikę zmiany widoku siatka/lista
+            });
+        });
+    }
+
+    // Przełączanie ulubionych
+    const noteGrid = document.querySelector('.notes-content-grid');
+    if(noteGrid) {
+        noteGrid.addEventListener('click', (e) => {
+            const favButton = e.target.closest('.btn-fav');
+            if (favButton) {
+                favButton.classList.toggle('active');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

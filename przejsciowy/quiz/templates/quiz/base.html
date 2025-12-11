@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}QuizMaster{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'quiz/style.css' %}">
+    <script src="https://unpkg.com/feather-icons"></script>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i data-feather="box"></i>
+                <span>QuizMaster</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="{% if request.resolver_match.url_name == 'main_menu' %}active{% endif %}">
+                        <a href="{% url 'quiz:main_menu' %}"><i data-feather="home"></i> Dashboard</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'start_quiz' %}active{% endif %}">
+                        <a href="{% url 'quiz:start_quiz' %}"><i data-feather="play-circle"></i> Rozpocznij Quiz</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'my_notes' %}active{% endif %}">
+                        <a href="{% url 'quiz:my_notes' %}"><i data-feather="file-text"></i> Moje Notatki</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'my_quizzes' %}active{% endif %}">
+                        <a href="{% url 'quiz:my_quizzes' %}"><i data-feather="trello"></i> Moje Quizy</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'multiplayer' %}active{% endif %}">
+                        <a href="{% url 'quiz:multiplayer' %}"><i data-feather="users"></i> Tryb Wieloosobowy</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'statistics' %}active{% endif %}">
+                        <a href="{% url 'quiz:statistics' %}"><i data-feather="bar-chart-2"></i> Statystyki</a>
+                    </li>
+                    <li><a href="#"><i data-feather="user"></i> Mój Profil</a></li>
+                    <li><a href="#"><i data-feather="settings"></i> Ustawienia</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="https://i.pravatar.cc/40?u=jan.kowalski" alt="Avatar użytkownika">
+                <div class="user-info">
+                    <span class="user-name">Jan Kowalski</span>
+                    <span class="user-email">jan.kowalski@email.com</span>
+                </div>
+                <i data-feather="more-horizontal"></i>
+            </div>
+        </aside>
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        feather.replace();
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

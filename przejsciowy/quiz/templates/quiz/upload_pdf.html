@@ -15,7 +15,7 @@
 
         <div class="panel upload-panel">
             <h2>1. Wybierz plik</h2>
-            <form method="post" enctype="multipart/form-data" action="{% url 'upload_pdf_view' %}">
+            <form method="post" enctype="multipart/form-data" action="{% url 'quiz:upload_pdf_view' %}">
                 {% csrf_token %}
                 
                 <div class="drop-zone" id="drop-zone">
@@ -44,7 +44,7 @@
 
             <div class="panel split-col">
                 <h2>3. Wyekstrahowany Tekst</h2>
-                <form method="post" action="{% url 'upload_pdf_view' %}" class="editor-form">
+                <form method="post" action="{% url 'quiz:upload_pdf_view' %}" class="editor-form">
                     {% csrf_token %}
                     
                     <textarea name="final_text" class="text-editor" spellcheck="false">{{ extracted_text }}</textarea>

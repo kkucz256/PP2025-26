@@ -1,0 +1,135 @@
+{% extends 'quiz/base.html' %}
+
+{% block title %}Dashboard - QuizMaster{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <div class="greeting">
+        <h1>Witaj ponownie, Jan! 👋</h1>
+        <p>Gotowy na kolejny quiz?</p>
+    </div>
+    <div class="header-actions">
+        <button class="notifications">
+            <i data-feather="bell"></i>
+            <span class="notification-count">3</span>
+        </button>
+        <button class="btn btn-primary">
+            <i data-feather="plus"></i>
+            Nowy Quiz
+        </button>
+    </div>
+</header>
+
+<section class="stats-grid">
+    <div class="stat-card card-blue">
+        <h2>24</h2>
+        <p>Ukończone Quizy</p>
+        <span class="stat-badge">+12%</span>
+    </div>
+    <div class="stat-card card-purple">
+        <h2>48</h2>
+        <p>Moje Notatki</p>
+        <span class="stat-badge">+5</span>
+    </div>
+    <div class="stat-card card-pink">
+        <h2>87%</h2>
+        <p>Średni Wynik</p>
+        <span class="stat-badge-alt">Top 10%</span>
+    </div>
+    <div class="stat-card card-orange">
+        <h2>7</h2>
+        <p>Dni z Rzędu</p>
+    </div>
+</section>
+
+<section class="section-container">
+    <h3 class="section-title">Szybkie Akcje</h3>
+    <div class="quick-actions-grid">
+        <a href="{% url 'quiz:start_quiz' %}" class="action-card">
+            <div class="action-icon-wrapper"><i data-feather="plus" class="action-icon"></i></div>
+            <h4>Stwórz Nowy Quiz</h4>
+            <p>Rozpocznij tworzenie quizu z własnych notatek</p>
+        </a>
+        <a href="#" class="action-card">
+            <div class="action-icon-wrapper"><i data-feather="users" class="action-icon"></i></div>
+            <h4>Gra Wielosobowa</h4>
+            <p>Zaproś znajomych i rywalizuj online</p>
+        </a>
+        <a href="{% url 'quiz:upload_pdf_view' %}" class="action-card">
+            <div class="action-icon-wrapper"><i data-feather="download-cloud" class="action-icon"></i></div>
+            <h4>Importuj Notatki</h4>
+            <p>Dodaj nowe materiały do nauki</p>
+        </a>
+    </div>
+</section>
+
+<div class="columns">
+    <section class="section-container column-left">
+        <div class="section-header">
+            <h3 class="section-title">Ostatnie Quizy</h3>
+            <a href="#" class="see-all">Zobacz wszystkie <i data-feather="arrow-right"></i></a>
+        </div>
+        <div class="list">
+            <div class="list-item">
+                <div class="list-item-icon-wrapper icon-blue"><i data-feather="book-open"></i></div>
+                <div class="list-item-content">
+                    <h4>Historia Polski</h4>
+                    <p>20 pytań • Średni poziom</p>
+                </div>
+                <div class="list-item-details">
+                    <p><i data-feather="clock"></i> 12 min</p>
+                    <p><i data-feather="calendar"></i> 2 dni temu</p>
+                </div>
+                <div class="list-item-score score-green">92%</div>
+                <a href="#" class="list-item-action">Powtórz <i data-feather="refresh-cw"></i></a>
+            </div>
+            <div class="list-item">
+                <div class="list-item-icon-wrapper icon-purple"><i data-feather="cpu"></i></div>
+                <div class="list-item-content">
+                    <h4>Fizyka Kwantowa</h4>
+                    <p>15 pytań • Trudny poziom</p>
+                </div>
+                <div class="list-item-details">
+                    <p><i data-feather="clock"></i> 18 min</p>
+                    <p><i data-feather="calendar"></i> 5 dni temu</p>
+                </div>
+                <div class="list-item-score score-yellow">78%</div>
+                <a href="#" class="list-item-action">Powtórz <i data-feather="refresh-cw"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container column-right">
+        <div class="section-header">
+            <h3 class="section-title">Moje Notatki</h3>
+            <button class="btn-icon"><i data-feather="plus"></i></button>
+        </div>
+        <div class="list">
+            <div class="note-item">
+                <div class="note-color-bar color-yellow"></div>
+                <div class="note-content">
+                    <h4>Matematyka - Pochodne</h4>
+                    <p>Podstawowe wzory i definicje pochodnych funkcji...</p>
+                    <div class="note-footer">
+                        <span><i data-feather="file-text"></i> 12 stron</span>
+                        <span>Wczoraj</span>
+                    </div>
+                </div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+            <div class="note-item">
+                <div class="note-color-bar color-blue"></div>
+                <div class="note-content">
+                    <h4>Biologia - Komórka</h4>
+                    <p>Budowa i funkcje organelli komórkowych...</p>
+                    <div class="note-footer">
+                        <span><i data-feather="file-text"></i> 8 stron</span>
+                        <span>3 dni temu</span>
+                    </div>
+                </div>
+                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
