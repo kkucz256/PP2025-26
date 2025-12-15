@@ -1,0 +1,52 @@
+{% comment %} quiz/templates/quiz/login.html {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie do Quizu</title>
+    <style>
+        /* Proste style Dark Theme dla czytelności */
+        body { font-family: Arial, sans-serif; background-color: #2e3440; color: #eceff4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { background-color: #3b4252; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); width: 300px; }
+        h2 { text-align: center; color: #88c0d0; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #e5e9f0; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #4c566a; border-radius: 4px; box-sizing: border-box; background-color: #434c5e; color: #eceff4; }
+        button { width: 100%; padding: 10px; background-color: #5e81ac; border: none; border-radius: 4px; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #81a1c1; }
+        .error { color: #bf616a; text-align: center; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Logowanie</h2>
+
+        {# Wyświetlenie wiadomości o błędzie #}
+        {% if error_message %}
+            <p class="error">{{ error_message }}</p>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %} {# Zabezpieczenie CSRF - WYMAGANE! #}
+
+            <div class="form-group">
+                <label for="username">Nazwa użytkownika:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Hasło:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit">Zaloguj się</button>
+        </form>
+
+        {# DODANA SEKCJA LINKU DO REJESTRACJI #}
+        <p style="text-align: center; margin-top: 20px;">
+            Nie masz konta? <a href="{% url 'quiz:register' %}" style="color: #a3be8c; text-decoration: none; font-weight: bold;">Zarejestruj się</a>
+        </p>
+    </div>
+</body>
+</html>

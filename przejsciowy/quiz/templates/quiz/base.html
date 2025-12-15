@@ -41,13 +41,14 @@
                     </li>
                     <li><a href="#"><i data-feather="user"></i> Mój Profil</a></li>
                     <li><a href="#"><i data-feather="settings"></i> Ustawienia</a></li>
+                    <li><a href="{% url 'quiz:logout' %}">Wyloguj się</a></li>
                 </ul>
             </nav>
             <div class="user-profile">
-                <img src="https://i.pravatar.cc/40?u=jan.kowalski" alt="Avatar użytkownika">
+                <img src="https://i.pravatar.cc/40?u={{ request.session.username }}" alt="Avatar użytkownika">
                 <div class="user-info">
-                    <span class="user-name">Jan Kowalski</span>
-                    <span class="user-email">jan.kowalski@email.com</span>
+                    <span class="user-name">{{ request.session.username }}</span>
+                    <span class="user-email">{{ request.session.mail }}</span>
                 </div>
                 <i data-feather="more-horizontal"></i>
             </div>
