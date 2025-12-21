@@ -33,5 +33,14 @@ services:
       - DB_PASSWORD=devpassword
       - DB_PORT=3306
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_storage:/root/.ollama
+
 volumes:
   db_data_v2:
+  ollama_storage:

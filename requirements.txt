@@ -2,3 +2,4 @@ Django
 pdfplumber
 python-dotenv
 mysqlclient
+requests
