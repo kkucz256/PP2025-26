@@ -80,30 +80,7 @@ WSGI_APPLICATION = "przejsciowy.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "defaultdb",
-#         "USER": "avnadmin",
-#         "PASSWORD": os.environ['AIVEN_PSWRD_PROJ'],
-#         "HOST": "projektprzejsciowy-fajnymailprojektprzejsciowy-48fd.f.aivencloud.com",
-#         "PORT": "10766",
-#         "OPTIONS": {
-#             "ssl": {"ca": os.path.join(BASE_DIR, "certpp.pem")},
-#         },
-#     }
-# }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'quiz_db',
-#         'USER': 'devuser',
-#         'PASSWORD': 'devpassword',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3307',
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
