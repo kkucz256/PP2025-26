@@ -4,3 +4,8 @@ python-dotenv
 mysqlclient
 requests
 azure-ai-inference
+# API schemas / fast api for Django
+django-ninja
+pydantic
+# CORS for frontend access
+django-cors-headers

@@ -11,46 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="Answers",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("content", models.TextField()),
-                ("is_correct", models.IntegerField(blank=True, null=True)),
-            ],
-            options={
-                "db_table": "answers",
-                "managed": False,
-            },
-        ),
-        migrations.CreateModel(
-            name="Question",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("content", models.TextField()),
-                ("position", models.IntegerField(blank=True, null=True)),
-            ],
-            options={
-                "db_table": "question",
-                "managed": False,
-            },
-        ),
-        migrations.CreateModel(
             name="Quiz",
             fields=[
                 (
@@ -67,11 +27,10 @@ class Migration(migrations.Migration):
             ],
             options={
                 "db_table": "quiz",
-                "managed": False,
             },
         ),
         migrations.CreateModel(
-            name="QuizAttempt",
+            name="Question",
             fields=[
                 (
                     "id",
@@ -82,18 +41,17 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("start_date", models.DateTimeField(blank=True, null=True)),
-                ("end_date", models.DateTimeField(blank=True, null=True)),
-                ("correct", models.IntegerField(blank=True, null=True)),
-                ("incorrect", models.IntegerField(blank=True, null=True)),
+                ("quiz", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Quiz")),
+                ("content", models.TextField()),
+                ("position", models.IntegerField(blank=True, null=True)),
             ],
             options={
-                "db_table": "quiz_attempt",
-                "managed": False,
+                "db_table": "question",
+                "ordering": ["position"],
             },
         ),
         migrations.CreateModel(
-            name="QuizSession",
+            name="Answers",
             fields=[
                 (
                     "id",
@@ -104,34 +62,12 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("access_code", models.CharField(max_length=20)),
-                ("start_time", models.DateTimeField(blank=True, null=True)),
-                ("end_time", models.DateTimeField(blank=True, null=True)),
-                ("is_active", models.IntegerField(blank=True, null=True)),
+                ("question", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Question")),
+                ("content", models.TextField()),
+                ("is_correct", models.BooleanField(default=False)),
             ],
             options={
-                "db_table": "quiz_session",
-                "managed": False,
-            },
-        ),
-        migrations.CreateModel(
-            name="QuizUser",
-            fields=[
-                (
-                    "pk",
-                    models.CompositePrimaryKey(
-                        "quiz_id",
-                        "user_id",
-                        blank=True,
-                        editable=False,
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-            ],
-            options={
-                "db_table": "quiz_user",
-                "managed": False,
+                "db_table": "answers",
             },
         ),
         migrations.CreateModel(
@@ -153,7 +89,132 @@ class Migration(migrations.Migration):
             ],
             options={
                 "db_table": "users",
-                "managed": False,
+            },
+        ),
+        migrations.CreateModel(
+            name="QuizAttempt",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quiz", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Quiz")),
+                ("user", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Users")),
+                ("start_date", models.DateTimeField(blank=True, null=True)),
+                ("end_date", models.DateTimeField(blank=True, null=True)),
+                ("correct", models.IntegerField(blank=True, null=True)),
+                ("incorrect", models.IntegerField(blank=True, null=True)),
+            ],
+            options={
+                "db_table": "quiz_attempt",
+            },
+        ),
+        migrations.CreateModel(
+            name="QuizSession",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quiz", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Quiz")),
+                ("host", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Users")),
+                ("access_code", models.CharField(max_length=20)),
+                ("start_time", models.DateTimeField(blank=True, null=True)),
+                ("end_time", models.DateTimeField(blank=True, null=True)),
+                ("is_active", models.BooleanField(blank=True, null=True)),
+            ],
+            options={
+                "db_table": "quiz_session",
+            },
+        ),
+        migrations.CreateModel(
+            name="QuizUser",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quiz", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Quiz")),
+                ("user", models.ForeignKey(on_delete=models.CASCADE, to="quiz.Users")),
+            ],
+            options={
+                "db_table": "quiz_user",
+            },
+        ),
+        migrations.CreateModel(
+            name="QuizStat",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quiz", models.OneToOneField(on_delete=models.CASCADE, to="quiz.Quiz")),
+                ("total_attempts", models.IntegerField(default=0)),
+                ("total_correct", models.IntegerField(default=0)),
+                ("total_incorrect", models.IntegerField(default=0)),
+            ],
+            options={
+                "db_table": "quiz_stat",
+            },
+        ),
+        migrations.CreateModel(
+            name="QuestionStat",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("question", models.OneToOneField(on_delete=models.CASCADE, to="quiz.Question")),
+                ("times_asked", models.IntegerField(default=0)),
+                ("times_correct", models.IntegerField(default=0)),
+            ],
+            options={
+                "db_table": "question_stat",
+            },
+        ),
+        migrations.CreateModel(
+            name="AnswerStat",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("answer", models.OneToOneField(on_delete=models.CASCADE, to="quiz.Answers")),
+                ("times_selected", models.IntegerField(default=0)),
+                ("times_selected_correct", models.IntegerField(default=0)),
+            ],
+            options={
+                "db_table": "answer_stat",
             },
         ),
     ]

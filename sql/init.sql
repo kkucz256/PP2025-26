@@ -1,3 +1,8 @@
+-- Ensure test database exists for Django test runner and grant privileges to dev user
+CREATE DATABASE IF NOT EXISTS `test_quiz_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON `test_quiz_db`.* TO 'devuser'@'%' ;
+FLUSH PRIVILEGES;
+
 ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE `users` (

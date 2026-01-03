@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Przejsciowy Frontend</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    header { margin-bottom: 1.5rem }
+    a { color: #2a7ae2 }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Frontend — Przejsciowy</h1>
+    <p>Prosty frontend serwowany przez kontener Docker. Backend API dostępne jest pod <code>http://localhost:8000/api/</code>.</p>
+  </header>
+
+  <main>
+    <p>Przykładowe linki:</p>
+    <ul>
+      <li><a href="http://localhost:8000/api/docs" target="_blank">Swagger API (backend)</a></li>
+      <li><a href="/" target="_blank">Strona główna frontendu</a></li>
+    </ul>
+
+    <section>
+      <h2>Twoje projekty (Quizy)</h2>
+      <div id="quizzes">Ładowanie quizów...</div>
+      <hr />
+      <h2>Szczegóły quizu</h2>
+      <div id="quiz-detail">Wybierz quiz z listy powyżej.</div>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = 'http://localhost:8000/api/quiz';
+
+    async function fetchQuizzes() {
+      const res = await fetch(`${API_BASE}/quizzes/`);
+      if (!res.ok) throw new Error('Nie udało się pobrać quizów');
+      const data = await res.json();
+      return data.quizzes || [];
+    }
+
+    function renderQuizzes(list) {
+      const container = document.getElementById('quizzes');
+      if (list.length === 0) {
+        container.textContent = 'Brak quizów';
+        return;
+      }
+      const ul = document.createElement('ul');
+      list.forEach(q => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = q.content + ' (' + q.slug + ')';
+        a.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await showQuizDetail(q.id);
+        });
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      container.innerHTML = '';
+      container.appendChild(ul);
+    }
+
+    async function showQuizDetail(id) {
+      const res = await fetch(`${API_BASE}/quizzes/${id}/`);
+      if (!res.ok) {
+        document.getElementById('quiz-detail').textContent = 'Błąd przy pobieraniu szczegółów';
+        return;
+      }
+      const quiz = await res.json();
+      const el = document.getElementById('quiz-detail');
+      el.innerHTML = `<h3>${quiz.content}</h3>`;
+      if (!quiz.questions || quiz.questions.length === 0) {
+        el.innerHTML += '<p>Brak pytań w tym quizie.</p>';
+        return;
+      }
+      const ol = document.createElement('ol');
+      quiz.questions.forEach(q => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${q.content}</strong>`;
+        if (q.answers && q.answers.length) {
+          const aul = document.createElement('ul');
+          q.answers.forEach(a => {
+            const ali = document.createElement('li');
+            ali.textContent = `${a.content} ${a.is_correct ? '(poprawna)' : ''}`;
+            aul.appendChild(ali);
+          });
+          li.appendChild(aul);
+        }
+        ol.appendChild(li);
+      });
+      el.appendChild(ol);
+    }
+
+    (async function init() {
+      try {
+        const quizzes = await fetchQuizzes();
+        renderQuizzes(quizzes);
+      } catch (err) {
+        document.getElementById('quizzes').textContent = 'Błąd: ' + err.toString();
+      }
+    })();
+  </script>
+</body>
+</html>
