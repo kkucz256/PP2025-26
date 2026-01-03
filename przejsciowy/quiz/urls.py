@@ -14,4 +14,5 @@ urlpatterns = [
     path('my-quizzes/', views.my_quizzes_view, name='my_quizzes'),
     path('multiplayer/', views.multiplayer_view, name='multiplayer'),
     path('statistics/', views.statistics_view, name='statistics'),
+    path('review-questions/', views.review_questions_view, name='review_questions_view'),
 ]

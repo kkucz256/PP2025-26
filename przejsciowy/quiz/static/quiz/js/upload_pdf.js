@@ -38,3 +38,11 @@ function updateThumbnail(dropZoneElement, file) {
   promptElement.style.fontWeight = "bold";
   promptElement.style.color = "#2563eb";
 }
+const slider = document.getElementById('question_count');
+const output = document.getElementById('rangeValue');
+
+if (slider && output) {
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+}

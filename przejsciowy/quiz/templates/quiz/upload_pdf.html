@@ -48,8 +48,13 @@
                 <h2>3. Wyekstrahowany Tekst</h2>
                 <form method="post" action="{% url 'quiz:upload_pdf_view' %}" class="editor-form">
                     {% csrf_token %}
-
                     <textarea name="final_text" class="text-editor" spellcheck="false">{{ extracted_text }}</textarea>
+
+                    <div class="slider-container">
+                        <label for="question_count">Liczba pytań: <span id="rangeValue">25</span></label>
+                        <input type="range" name="question_count" id="question_count" 
+                            min="10" max="50" value="25" step="1" class="slider">
+                    </div>
 
                     <input type="hidden" name="action" value="generate">
                     <input type="hidden" name="filename_to_delete" value="{{ filename }}">

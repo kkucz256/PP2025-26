@@ -1,0 +1,186 @@
+/* RESET I PODSTAWA */
+* {
+    box-sizing: border-box; /* To naprawia rozjeżdżanie się pól przez padding */
+}
+
+:root {
+    --primary: #2563eb;
+    --success: #16a34a;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+}
+
+.main-container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+header .btn-secondary {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    opacity: 0.6;
+}
+
+/* PANEL NAZWY QUIZU */
+.quiz-meta-panel {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quiz-meta-panel label {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.title-input {
+    width: 100% !important; /* Wymuszamy pełną szerokość */
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+}
+
+.title-input:focus {
+    border-color: var(--primary);
+}
+
+/* KARTA PYTANIA */
+.question-card {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.question-card h3 {
+    margin: 0 0 1rem 0;
+    color: var(--primary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* TEXTAREA PYTANIA */
+.edit-q {
+    width: 100% !important;
+    min-height: 100px;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 1.5rem;
+}
+
+/* GRID ODPOWIEDZI */
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dwie kolumny */
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .options-grid {
+        grid-template-columns: 1fr; /* Jedna kolumna na telefonie */
+    }
+}
+
+.opt-row {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+}
+
+/* Podświetlenie wybranej poprawnej odpowiedzi */
+.opt-row:has(input[type="radio"]:checked) {
+    background: #f0fdf4;
+    border-color: var(--success);
+}
+
+.opt-row input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    cursor: pointer;
+    accent-color: var(--success);
+    flex-shrink: 0; /* Żeby radio się nie zgniatało */
+}
+
+.edit-opt {
+    flex-grow: 1; /* To sprawia, że pole zajmuje całą resztę miejsca */
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    padding: 5px;
+    color: var(--text);
+    outline: none;
+}
+
+.edit-opt:focus {
+    border-bottom: 2px solid var(--primary);
+}
+
+/* PRZYCISK ZAPISU */
+.actions {
+    text-align: center;
+    padding: 2rem 0 4rem 0;
+}
+
+.btn-large {
+    background-color: var(--success);
+    color: white;
+    padding: 1.2rem 3rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(22, 163, 74, 0.3);
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-large:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}

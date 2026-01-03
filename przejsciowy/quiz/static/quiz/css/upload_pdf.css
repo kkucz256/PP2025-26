@@ -144,3 +144,68 @@ header {
     text-align: center;
     border: 1px solid #fecaca;
 }
+.slider-container {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f1f5f9;
+    border-radius: 6px;
+}
+
+.slider-container label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: var(--border);
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    transition: background 0.15s ease-in-out;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    background: #1d4ed8;
+}
+
+.q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.btn-delete {
+    background: transparent;
+    color: var(--danger, #ef4444);
+    border: 1px solid var(--danger, #ef4444);
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.btn-delete:hover {
+    background: var(--danger, #ef4444);
+    color: white;
+}
+
+.add-action {
+    margin: 2rem 0;
+    text-align: center;
+}
