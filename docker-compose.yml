@@ -32,6 +32,7 @@ services:
       - DB_USER=devuser
       - DB_PASSWORD=devpassword
       - DB_PORT=3306
+      - MIGRATE=true
 
   ollama:
     image: ollama/ollama:latest
@@ -40,6 +41,21 @@ services:
       - "11434:11434"
     volumes:
       - ollama_storage:/root/.ollama
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: quiz_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - web
+    environment:
+      - API_URL=http://web:8000/api
 
 volumes:
   db_data_v2:

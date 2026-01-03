@@ -114,7 +114,7 @@ class QuestionGenerator:
         except Exception as e:
             print(f"Błąd Azure Direct: {str(e)}")
             return []
-
+        
     @staticmethod
     def _clean_and_parse(text):
         """Czyści odpowiedź z tagów myślenia i bloków markdown."""
@@ -127,3 +127,120 @@ class QuestionGenerator:
             except json.JSONDecodeError:
                 pass
         return []
+
+# --- Statistics services ---
+from .models import QuizStat, QuestionStat, AnswerStat, Quiz, Question, Answers, QuizAttempt
+
+
+def ensure_quiz_stat(quiz: Quiz) -> QuizStat:
+    stat, _ = QuizStat.objects.get_or_create(quiz=quiz)
+    return stat
+
+
+def ensure_question_stat(question: Question) -> QuestionStat:
+    stat, _ = QuestionStat.objects.get_or_create(question=question)
+    return stat
+
+
+def ensure_answer_stat(answer: Answers) -> AnswerStat:
+    stat, _ = AnswerStat.objects.get_or_create(answer=answer)
+    return stat
+
+
+def update_stats_on_submission(attempt: QuizAttempt, results: list):
+    """results: list of dicts {question_id, correct(bool), correct_answer_ids:[], selected_answer_ids:[]}"""
+    quiz = attempt.quiz
+    quiz_stat = ensure_quiz_stat(quiz)
+
+    total_correct = 0
+    total_incorrect = 0
+
+    for r in results:
+        q_id = r.get('question_id')
+        correct = r.get('correct', False)
+        correct_ids = set(r.get('correct_answer_ids', []))
+        selected_ids = set(r.get('selected_answer_ids', []))
+
+        try:
+            q = Question.objects.get(pk=q_id, quiz=quiz)
+        except Question.DoesNotExist:
+            continue
+
+        q_stat = ensure_question_stat(q)
+        q_stat.times_asked += 1
+        if correct:
+            q_stat.times_correct += 1
+        q_stat.save()
+
+        # update answer stats
+        for sid in selected_ids:
+            try:
+                a = Answers.objects.get(pk=sid, question=q)
+            except Answers.DoesNotExist:
+                continue
+            a_stat = ensure_answer_stat(a)
+            a_stat.times_selected += 1
+            if sid in correct_ids:
+                a_stat.times_selected_correct += 1
+            a_stat.save()
+
+        if correct:
+            total_correct += 1
+        else:
+            total_incorrect += 1
+
+    quiz_stat.total_attempts += 1
+    quiz_stat.total_correct += total_correct
+    quiz_stat.total_incorrect += total_incorrect
+    quiz_stat.save()
+
+
+def get_quiz_stats(quiz: Quiz) -> dict:
+    qs = ensure_quiz_stat(quiz)
+    questions = []
+    for q in quiz.questions.all():
+        q_stat = QuestionStat.objects.filter(question=q).first()
+        answers = []
+        for a in q.answers.all():
+            a_stat = AnswerStat.objects.filter(answer=a).first()
+            answers.append({
+                "answer_id": a.id,
+                "content": a.content,
+                "times_selected": a_stat.times_selected if a_stat else 0,
+                "times_selected_correct": a_stat.times_selected_correct if a_stat else 0,
+            })
+        questions.append({
+            "question_id": q.id,
+            "content": q.content,
+            "times_asked": q_stat.times_asked if q_stat else 0,
+            "times_correct": q_stat.times_correct if q_stat else 0,
+            "answers": answers,
+        })
+
+    return {
+        "quiz_id": quiz.id,
+        "total_attempts": qs.total_attempts,
+        "total_correct": qs.total_correct,
+        "total_incorrect": qs.total_incorrect,
+        "questions": questions,
+    }
+
+
+def get_question_stats(question: Question) -> dict:
+    q_stat = QuestionStat.objects.filter(question=question).first()
+    answers = []
+    for a in question.answers.all():
+        a_stat = AnswerStat.objects.filter(answer=a).first()
+        answers.append({
+            "answer_id": a.id,
+            "content": a.content,
+            "times_selected": a_stat.times_selected if a_stat else 0,
+            "times_selected_correct": a_stat.times_selected_correct if a_stat else 0,
+        })
+    return {
+        "question_id": question.id,
+        "content": question.content,
+        "times_asked": q_stat.times_asked if q_stat else 0,
+        "times_correct": q_stat.times_correct if q_stat else 0,
+        "answers": answers,
+    }

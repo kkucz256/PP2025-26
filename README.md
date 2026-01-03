@@ -9,7 +9,16 @@ docker-compose build
 
 ### 2. Uruchomienie kontenerów
 ```bash
-docker-compose up -d
+# start containers in background (rebuild if needed)
+docker-compose up -d --build
+```
+
+PowerShell helper script (Windows)
+```
+# start detached (build if necessary):
+.\scripts\start-containers.ps1
+# start and open a separate window to follow logs:
+.\scripts\start-containers.ps1 -FollowLogs
 ```
 
 ### 3. Migracja bazy danych (przy pierwszym uruchomieniu)

@@ -20,9 +20,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# API
+from quiz.api import api as quiz_api
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('quiz.urls'))
+    path('', include('quiz.urls')),
+    path('api/', quiz_api.urls),
 ]
 
 if settings.DEBUG:

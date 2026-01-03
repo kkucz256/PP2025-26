@@ -44,10 +44,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "quiz"
+    "quiz",
+    # CORS support for frontend (dev)
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    # CORS middleware should be placed as high as possible
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -137,5 +141,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# CORS — allow frontend dev origin
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
