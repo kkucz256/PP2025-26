@@ -14,9 +14,7 @@
             <a href="{% url 'quiz:upload_pdf_view' %}" class="btn-secondary">Anuluj</a>
         </header>
 
-        <form method="post" action="{% url 'quiz:review_questions_view' %}" id="quiz-form">
-            {% csrf_token %}
-            
+        <form id="quiz-form">
             <div class="panel quiz-meta">
                 <label for="quiz_name">Nazwa Twojego Quizu</label>
                 <input type="text" name="quiz_name" id="quiz_name" 
@@ -24,30 +22,8 @@
                        required class="title-input">
             </div>
 
-            <div class="questions-list">
-                {% for q in questions %}
-                <div class="panel question-card">
-                    <div class="q-header">
-                        <h3>Pytanie <span class="q-index">{{ forloop.counter }}</span></h3>
-                        <button type="button" class="btn-delete" onclick="removeQuestion(this)">Usuń</button>
-                    </div>
-                    
-                    <textarea name="q_{{ forloop.counter }}_text" class="edit-q" required>{{ q.question }}</textarea>
-                    
-                    <div class="options-grid">
-                        {% for opt in q.options %}
-                        <div class="opt-row">
-                            <input type="radio" name="q_{{ forloop.parentloop.counter }}_correct" 
-                                   value="{{ forloop.counter0 }}" 
-                                   {% if q.correct == forloop.counter0 %}checked{% endif %} required>
-                            
-                            <input type="text" name="q_{{ forloop.parentloop.counter }}_opt_{{ forloop.counter0 }}" 
-                                   value="{{ opt }}" class="edit-opt" required>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="questions-list" id="questions-container">
+                <!-- Pytania będą wstawiane dynamicznie z API -->
             </div>
 
             <div class="add-action">
@@ -55,11 +31,40 @@
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn btn-success btn-large">Zapisz Quiz na stałe</button>
+                <button type="button" id="save-quiz-btn" class="btn btn-success btn-large">Zapisz Quiz na stałe</button>
+                <div id="loading-indicator" class="loading-indicator" style="display: none;">
+                    <p>Zapisuję quiz...</p>
+                </div>
             </div>
         </form>
+
+        <div id="success-message" class="success-message" style="display: none;">
+            <p>Quiz został pomyślnie zapisany! Przekierowanie...</p>
+        </div>
+
+        <div id="error-message" class="error-message" style="display: none;">
+            <p id="error-text"></p>
+        </div>
     </div>
 
     <script src="{% static 'quiz/js/review_questions.js' %}"></script>
+    <script>
+        // Konfiguracja API
+        const API_BASE_URL = '/api/quiz';
+        const CSRF_TOKEN = '{{ csrf_token }}';
+        const USER_ID = {{ request.session.user_id|default:'null' }};
+        
+        // Inicjalne pytania z sesji
+        const initialQuestions = {{ questions_json|safe }};
+        console.log('🔍 DEBUG - initialQuestions z Django:', initialQuestions);
+        console.log('🔍 DEBUG - Liczba pytań:', initialQuestions ? initialQuestions.length : 0);
+        
+        if (initialQuestions && initialQuestions.length > 0) {
+            window.initialQuestions = initialQuestions;
+            console.log('✓ Pytania wstawione do window.initialQuestions');
+        } else {
+            console.warn('⚠️ Pytania puste lub undefined!');
+        }
+    </script>
 </body>
 </html>

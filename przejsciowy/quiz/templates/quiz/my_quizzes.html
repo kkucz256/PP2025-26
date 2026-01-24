@@ -11,202 +11,318 @@
             <p>Zarządzaj swoimi quizami i śledź postępy</p>
         </div>
         <div class="header-actions">
-             <div class="header-actions">
-                <button class="btn btn-primary"><i data-feather="plus"></i> Nowy Quiz</button>
-            </div>
+            <a href="{% url 'quiz:upload_pdf_view' %}" class="btn btn-primary">
+                <i data-feather="plus"></i> Nowy Quiz
+            </a>
         </div>
     </header>
 
-    <div class="stats-grid quizzes-stats-grid">
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading-spinner" style="display: none;">
+        <p>Ładowanie quizów...</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid quizzes-stats-grid" id="stats-container" style="display: none;">
         <div class="stat-card card-blue">
             <i data-feather="file-text"></i>
-            <h2>36</h2>
-            <p>Wszystkie Quizy</p>
-        </div>
-        <div class="stat-card card-green">
-            <i data-feather="check-circle"></i>
-            <h2>0</h2>
-            <p>Ukończone</p>
-        </div>
-        <div class="stat-card card-orange">
-            <i data-feather="clock"></i>
-            <h2>8</h2>
-            <p>W Trakcie</p>
-        </div>
-        <div class="stat-card card-purple">
-            <i data-feather="bookmark"></i>
-            <h2>4</h2>
-            <p>Zapisane</p>
+            <h2 id="total-quizzes">0</h2>
+            <p>Moje Quizy</p>
         </div>
     </div>
 
-    <div class="quizzes-page-toolbar">
-        <div class="search-bar">
-            <i data-feather="search"></i>
-            <input type="text" placeholder="Szukaj quizów...">
-        </div>
-        <div class="toolbar-actions">
-            <button class="btn-secondary"><i data-feather="filter"></i> Filtruj</button>
-            <button class="btn-secondary"><i data-feather="arrow-up-down"></i> Sortuj</button>
-        </div>
-    </div>
-    
-    <div class="filter-tabs-quizzes">
-        <button class="tab-button active">Wszystkie</button>
-        <button class="tab-button">Ukończone</button>
-        <button class="tab-button">W trakcie</button>
-        <button class="tab-button">Zapisane</button>
-        <span class="divider"></span>
-        <button class="tab-button">Matematyka</button>
-        <button class="tab-button">Języki</button>
-        <button class="tab-button">Nauki ścisłe</button>
+    <!-- Quizzes Grid -->
+    <div class="quizzes-content-grid" id="quizzes-container">
+        <!-- Quizy będą wstawiane tutaj dynamicznie -->
     </div>
 
-    <div class="quizzes-content-grid">
-        <!-- Przykładowy quiz 1 -->
-        <div class="quiz-card">
-            <div class="quiz-card-header">
-                <div class="quiz-icon icon-blue"><i data-feather="book-open"></i></div>
-                <h4>Historia Polski</h4>
-                <div class="quiz-score score-green">92%</div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
-            </div>
-            <p class="quiz-desc">Najważniejsze wydarzenia w historii Polski od średniowiecza do czasów współczesnych.</p>
-            <div class="quiz-details">
-                <span><i data-feather="help-circle"></i> 20 pytań</span>
-                <span><i data-feather="clock"></i> 15 min</span>
-                <span><i data-feather="trending-up"></i> Średni</span>
-            </div>
-            <div class="quiz-footer">
-                <span class="completion-date">Ukończono 2 dni temu</span>
-                <a href="#" class="btn-link">Powtórz <i data-feather="refresh-cw"></i></a>
-            </div>
+    <!-- Empty State -->
+    <div id="empty-state" style="display: none;">
+        <div class="empty-state-container">
+            <i data-feather="inbox" class="empty-icon"></i>
+            <h3>Brak quizów</h3>
+            <p>Nie masz jeszcze żadnych quizów. Stwórz nowy quiz aby zacząć!</p>
+            <a href="{% url 'quiz:upload_pdf_view' %}" class="btn btn-primary">
+                <i data-feather="plus"></i> Stwórz Quiz z PDF
+            </a>
         </div>
+    </div>
 
-        <!-- Przykładowy quiz 2 -->
-        <div class="quiz-card">
-            <div class="quiz-card-header">
-                <div class="quiz-icon icon-purple"><i data-feather="codesandbox"></i></div>
-                <h4>Fizyka Kwantowa</h4>
-                <div class="quiz-score score-yellow">78%</div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
-            </div>
-            <p class="quiz-desc">Podstawy mechaniki kwantowej, teoria falowa i zasada nieoznaczoności.</p>
-            <div class="quiz-details">
-                <span><i data-feather="help-circle"></i> 15 pytań</span>
-                <span><i data-feather="clock"></i> 18 min</span>
-                <span><i data-feather="trending-up"></i> Trudny</span>
-            </div>
-            <div class="quiz-footer">
-                <span class="completion-date">Ukończono 5 dni temu</span>
-                <a href="#" class="btn-link">Powtórz <i data-feather="refresh-cw"></i></a>
-            </div>
-        </div>
-
-        <!-- Przykładowy quiz 3 -->
-        <div class="quiz-card">
-            <div class="quiz-card-header">
-                <div class="quiz-icon icon-pink"><i data-feather="award"></i></div>
-                <h4>Angielski B2</h4>
-                <div class="quiz-score score-green">95%</div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
-            </div>
-            <p class="quiz-desc">Gramatyka, słownictwo i idiomy na poziomie upper-intermediate.</p>
-            <div class="quiz-details">
-                <span><i data-feather="help-circle"></i> 25 pytań</span>
-                <span><i data-feather="clock"></i> 22 min</span>
-                <span><i data-feather="trending-up"></i> Średni</span>
-            </div>
-            <div class="quiz-footer">
-                <span class="completion-date">Ukończono 1 tydzień temu</span>
-                <a href="#" class="btn-link">Powtórz <i data-feather="refresh-cw"></i></a>
-            </div>
-        </div>
-
-        <!-- Przykładowy quiz 4 (W trakcie) -->
-        <div class="quiz-card in-progress">
-            <div class="quiz-card-header">
-                <div class="quiz-icon icon-orange"><i data-feather="divide-circle"></i></div>
-                <h4>Matematyka - Pochodne</h4>
-                <div class="quiz-status">W trakcie</div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
-            </div>
-            <p class="quiz-desc">Definicje, wzory i zastosowania pochodnych funkcji.</p>
-            <div class="quiz-details">
-                <span><i data-feather="help-circle"></i> 18 pytań</span>
-                <span><i data-feather="clock"></i> 20 min</span>
-                <span><i data-feather="trending-up"></i> Średni</span>
-            </div>
-            <div class="quiz-footer">
-                <div class="progress-bar">
-                    <div class="progress" style="width: 67%;"></div>
-                </div>
-                <span class="progress-text">Postęp: 12/18</span>
-                <div class="quiz-score-alt">67%</div>
-            </div>
-        </div>
-
-        <!-- Przykładowy quiz 5 (W trakcie) -->
-        <div class="quiz-card in-progress">
-             <div class="quiz-card-header">
-                <div class="quiz-icon icon-green"><i data-feather="flask-conical"></i></div>
-                <h4>Chemia Organiczna</h4>
-                <div class="quiz-status">W trakcie</div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
-            </div>
-            <p class="quiz-desc">Węglowodory, grupy funkcyjne i reakcje podstawienia.</p>
-            <div class="quiz-details">
-                <span><i data-feather="help-circle"></i> 22 pytań</span>
-                <span><i data-feather="clock"></i> 25 min</span>
-                <span><i data-feather="trending-up"></i> Trudny</span>
-            </div>
-            <div class="quiz-footer">
-                <div class="progress-bar">
-                    <div class="progress" style="width: 88%;"></div>
-                </div>
-                <span class="progress-text">Ukończono 3 dni temu</span>
-                <div class="quiz-score-alt">88%</div>
-            </div>
-        </div>
-
-        <!-- Przykładowy quiz 6 (W trakcie) -->
-        <div class="quiz-card in-progress">
-            <div class="quiz-card-header">
-                <div class="quiz-icon icon-blue"><i data-feather="git-branch"></i></div>
-                <h4>Biologia - Genetyka</h4>
-                <div class="quiz-status">W trakcie</div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
-            </div>
-            <p class="quiz-desc">DNA, RNA, transkrypcja i translacja materiału genetycznego.</p>
-            <div class="quiz-details">
-                <span><i data-feather="help-circle"></i> 20 pytań</span>
-                <span><i data-feather="clock"></i> 18 min</span>
-                <span><i data-feather="trending-up"></i> Średni</span>
-            </div>
-            <div class="quiz-footer">
-                <div class="progress-bar">
-                    <div class="progress" style="width: 40%;"></div>
-                </div>
-                <span class="progress-text">Postęp: 8/20</span>
-                <div class="quiz-score-alt">40%</div>
-            </div>
-        </div>
+    <!-- Error Message -->
+    <div id="error-message" class="error-notification" style="display: none;">
+        <p id="error-text"></p>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Przełączanie filtrów
-    const filterTabs = document.querySelector('.filter-tabs-quizzes');
-    if(filterTabs) {
-        const buttons = filterTabs.querySelectorAll('.tab-button');
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                buttons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-            });
-        });
+<style>
+    .loading-spinner {
+        text-align: center;
+        padding: 3rem;
+        font-size: 1.1rem;
+        color: #666;
     }
-});
+
+    .empty-state-container {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        color: #ccc;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state-container h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state-container p {
+        color: #666;
+        margin-bottom: 2rem;
+    }
+
+    .error-notification {
+        background-color: #dc2626;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .quiz-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+    }
+
+    .quiz-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .quiz-card h4 {
+        margin-top: 0;
+        color: #2563eb;
+        font-size: 1.1rem;
+    }
+
+    .quiz-card-meta {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 1rem 0;
+    }
+
+    .quiz-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 1rem;
+    }
+
+    .btn-small {
+        flex: 1;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.2s;
+    }
+
+    .btn-start {
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .btn-start:hover {
+        background-color: #1d4ed8;
+    }
+
+    .btn-delete {
+        background-color: #dc2626;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background-color: #b91c1c;
+    }
+</style>
+
+<script src="{% static 'quiz/js/api-client.js' %}"></script>
+<script>
+    const API = new QuizAPI('/api/quiz', '{{ csrf_token }}');
+    const USER_ID = {{ request.session.user_id|default:'null' }};
+
+    // Załaduj quizy przy załadowaniu strony
+    document.addEventListener('DOMContentLoaded', loadMyQuizzes);
+
+    /**
+     * Załaduj wszystkie quizy użytkownika
+     */
+    async function loadMyQuizzes() {
+        if (!USER_ID) {
+            showError('Nie jesteś zalogowany');
+            return;
+        }
+
+        showLoading(true);
+        try {
+            const response = await API.getQuizzes(USER_ID);
+            const quizzes = response.quizzes || [];
+            
+            if (quizzes.length === 0) {
+                showEmptyState();
+            } else {
+                renderQuizzes(quizzes);
+                updateStats(quizzes);
+            }
+        } catch (error) {
+            console.error('Błąd ładowania quizów:', error);
+            showError('Nie udało się załadować quizów: ' + error.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    /**
+     * Renderuj listę quizów
+     */
+    function renderQuizzes(quizzes) {
+        const container = document.getElementById('quizzes-container');
+        container.innerHTML = '';
+
+        quizzes.forEach(quiz => {
+            const card = document.createElement('div');
+            card.className = 'quiz-card';
+            card.innerHTML = `
+                <h4>${escapeHtml(quiz.content)}</h4>
+                <div class="quiz-card-meta">
+                    <p>📚 <strong>${quiz.questions?.length || 0}</strong> pytań</p>
+                    <p>🔗 ID: <code>${quiz.id}</code></p>
+                </div>
+                <div class="quiz-actions">
+                    <button class="btn-small btn-start" onclick="startQuiz(${quiz.id})">
+                        Rozpocznij
+                    </button>
+                    <button class="btn-small btn-delete" onclick="confirmDelete(${quiz.id}, '${escapeHtml(quiz.content)}')">
+                        Usuń
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        document.getElementById('stats-container').style.display = 'grid';
+        document.getElementById('empty-state').style.display = 'none';
+    }
+
+    /**
+     * Zaktualizuj statystyki
+     */
+    function updateStats(quizzes) {
+        document.getElementById('total-quizzes').textContent = quizzes.length;
+    }
+
+    /**
+     * Pokaż pustą stronę
+     */
+    function showEmptyState() {
+        document.getElementById('quizzes-container').innerHTML = '';
+        document.getElementById('stats-container').style.display = 'none';
+        document.getElementById('empty-state').style.display = 'block';
+    }
+
+    /**
+     * Rozpocznij quiz
+     */
+    async function startQuiz(quizId) {
+        try {
+            const attempt = await API.createAttempt({
+                quiz_id: quizId,
+                user_id: USER_ID
+            });
+
+            sessionStorage.setItem('currentAttemptId', attempt.id);
+            sessionStorage.setItem('currentQuizId', quizId);
+
+            window.location.href = `/quiz/start-quiz/?attempt_id=${attempt.id}`;
+        } catch (error) {
+            showError('Nie udało się rozpocząć quizu');
+        }
+    }
+
+    /**
+     * Potwierdź i usuń quiz
+     */
+    async function confirmDelete(quizId, quizName) {
+        if (!confirm(`Czy na pewno chcesz usunąć quiz "${quizName}"?\n\nTa operacja jest nieodwracalna!`)) {
+            return;
+        }
+
+        try {
+            const quiz = await API.getQuiz(quizId);
+            
+            // Usuń wszystkie pytania
+            for (let question of quiz.questions || []) {
+                try {
+                    await API.deleteQuestion(question.id);
+                } catch (e) {
+                    console.warn(`Nie udało się usunąć pytania ${question.id}:`, e);
+                }
+            }
+
+            // Usuń quiz
+            await API.deleteQuiz(quizId);
+
+            showNotification(`Quiz "${quizName}" został usunięty`);
+            loadMyQuizzes();
+        } catch (error) {
+            showError('Błąd: ' + error.message);
+        }
+    }
+
+    /**
+     * Pokaż/ukryj loading
+     */
+    function showLoading(show) {
+        document.getElementById('loading').style.display = show ? 'block' : 'none';
+    }
+
+    /**
+     * Pokaż błąd
+     */
+    function showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        errorText.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    /**
+     * Pokaż powiadomienie
+     */
+    function showNotification(message) {
+        alert(message);
+    }
+
+    /**
+     * Escape HTML
+     */
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 </script>
+
 {% endblock %}

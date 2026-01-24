@@ -103,6 +103,15 @@ def upload_pdf_view(request):
 def review_questions_view(request):
     questions = request.session.get('temp_questions', [])
     
+    # DEBUG
+    print("\n" + "="*60)
+    print("DEBUG review_questions_view:")
+    print(f"  - temp_questions w sesji: {questions is not None}")
+    print(f"  - Liczba pytań: {len(questions) if questions else 0}")
+    if questions:
+        print(f"  - Pierwsze pytanie: {questions[0] if questions else 'BRAK'}")
+    print("="*60 + "\n")
+    
     if request.method == 'POST':
         quiz_name = request.POST.get('quiz_name')
         parsed_data = {}
@@ -129,9 +138,14 @@ def review_questions_view(request):
         print(json.dumps(parsed_data, indent=4, ensure_ascii=False))
         print("="*50 + "\n")
         
-        return redirect('quiz:my_quizzes')
+        return redirect('/my-quizzes/')
 
-    return render(request, 'quiz/review_questions.html', {'questions': questions})
+    # Przekaż pytania jako JSON do template'u
+    questions_json = json.dumps(questions)
+    return render(request, 'quiz/review_questions.html', {
+        'questions': questions,
+        'questions_json': questions_json
+    })
 
 def login_view(request):
     if 'user_id' in request.session:

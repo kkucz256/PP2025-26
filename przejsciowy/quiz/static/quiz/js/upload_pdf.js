@@ -46,3 +46,29 @@ if (slider && output) {
         output.innerHTML = this.value;
     }
 }
+
+// Obsługa przesłania formularza - przechowaj pytania w sessionStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const generateForm = document.querySelector('form[action*="upload"]');
+    
+    if (generateForm) {
+        const generateBtn = generateForm.querySelector('button[name="action"][value="generate"]');
+        
+        if (generateBtn) {
+            generateBtn.addEventListener('click', function(e) {
+                // Po wciśnięciu przycisku "Generuj" - dane będą przesłane z sessionu
+                // Pytania zostaną dostarczone z backendu jako JSON
+            });
+        }
+    }
+});
+
+/**
+ * Funkcja do ręcznego przechowywania pytań w sessionStorage
+ * (może być użyta jeśli backend przesyła pytania jako JSON)
+ */
+function storeQuestionsInSession(questions) {
+    if (questions && Array.isArray(questions)) {
+        sessionStorage.setItem('temp_questions', JSON.stringify(questions));
+    }
+}
