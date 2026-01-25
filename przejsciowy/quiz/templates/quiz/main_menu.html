@@ -8,57 +8,54 @@
         <h1>Witaj ponownie, {{ first_name }}! 👋</h1>
         <p>Gotowy na kolejny quiz?</p>
     </div>
-    <div class="header-actions">
-        <button class="notifications">
-            <i data-feather="bell"></i>
-            <span class="notification-count">3</span>
-        </button>
-        <button class="btn btn-primary">
-            <i data-feather="plus"></i>
-            Nowy Quiz
-        </button>
-    </div>
 </header>
 
 <section class="stats-grid">
     <div class="stat-card card-blue">
-        <h2>24</h2>
-        <p>Ukończone Quizy</p>
-        <span class="stat-badge">+12%</span>
+        <h2>{{ completed_attempts }}</h2>
+        <p>Ukończone Podejścia</p>
+        <span class="stat-badge">{{ completed_quizzes }} quizów</span>
     </div>
     <div class="stat-card card-purple">
-        <h2>48</h2>
-        <p>Moje Notatki</p>
-        <span class="stat-badge">+5</span>
+        <h2>{{ total_quizzes }}</h2>
+        <p>Dostępne Quizy</p>
+        <span class="stat-badge">Moje + Udostępnione</span>
     </div>
     <div class="stat-card card-pink">
-        <h2>87%</h2>
+        <h2>{{ avg_percentage }}%</h2>
         <p>Średni Wynik</p>
-        <span class="stat-badge-alt">Top 10%</span>
+        {% if avg_percentage >= 80 %}
+            <span class="stat-badge-alt">Top 10%</span>
+        {% elif avg_percentage >= 60 %}
+            <span class="stat-badge-alt">Średnio</span>
+        {% else %}
+            <span class="stat-badge-alt">Do poprawy</span>
+        {% endif %}
     </div>
     <div class="stat-card card-orange">
-        <h2>7</h2>
-        <p>Dni z Rzędu</p>
+        <h2>{{ learning_days }}</h2>
+        <p>Dni Aktywności</p>
+        <span class="stat-badge">W sumie</span>
     </div>
 </section>
 
 <section class="section-container">
     <h3 class="section-title">Szybkie Akcje</h3>
     <div class="quick-actions-grid">
-        <a href="{% url 'quiz:start_quiz' %}" class="action-card">
-            <div class="action-icon-wrapper"><i data-feather="plus" class="action-icon"></i></div>
-            <h4>Stwórz Nowy Quiz</h4>
-            <p>Rozpocznij tworzenie quizu z własnych notatek</p>
-        </a>
-        <a href="#" class="action-card">
-            <div class="action-icon-wrapper"><i data-feather="users" class="action-icon"></i></div>
-            <h4>Gra Wielosobowa</h4>
-            <p>Zaproś znajomych i rywalizuj online</p>
+        <a href="{% url 'quiz:my_quizzes' %}" class="action-card">
+            <div class="action-icon-wrapper"><i data-feather="play" class="action-icon"></i></div>
+            <h4>Rozpocznij Quiz</h4>
+            <p>Rozwiąż jeden z dostępnych quizów</p>
         </a>
         <a href="{% url 'quiz:upload_pdf_view' %}" class="action-card">
-            <div class="action-icon-wrapper"><i data-feather="download-cloud" class="action-icon"></i></div>
-            <h4>Importuj Notatki</h4>
-            <p>Dodaj nowe materiały do nauki</p>
+            <div class="action-icon-wrapper"><i data-feather="upload-cloud" class="action-icon"></i></div>
+            <h4>Nowy Quiz z PDF</h4>
+            <p>Utwórz quiz wgrywając plik PDF</p>
+        </a>
+        <a href="{% url 'quiz:statistics' %}" class="action-card">
+            <div class="action-icon-wrapper"><i data-feather="bar-chart-2" class="action-icon"></i></div>
+            <h4>Moje Statystyki</h4>
+            <p>Sprawdź swoje wyniki i ranking</p>
         </a>
     </div>
 </section>
@@ -66,68 +63,111 @@
 <div class="columns">
     <section class="section-container column-left">
         <div class="section-header">
-            <h3 class="section-title">Ostatnie Quizy</h3>
-            <a href="#" class="see-all">Zobacz wszystkie <i data-feather="arrow-right"></i></a>
+            <h3 class="section-title">Ostatnie Podejścia</h3>
         </div>
         <div class="list">
-            <div class="list-item">
-                <div class="list-item-icon-wrapper icon-blue"><i data-feather="book-open"></i></div>
-                <div class="list-item-content">
-                    <h4>Historia Polski</h4>
-                    <p>20 pytań • Średni poziom</p>
+            {% for attempt in recent_attempts %}
+                <div class="list-item">
+                    <div class="list-item-icon-wrapper icon-blue"><i data-feather="book-open"></i></div>
+                    <div class="list-item-content">
+                        <h4>{{ attempt.quiz.content }}</h4>
+                        <p>{{ attempt.quiz.questions.count }} pytań • {{ attempt.start_date|date:"d.m.Y" }}</p>
+                    </div>
+                    <div class="list-item-score score-green">
+                        {% if attempt.correct %}
+                            {% if attempt.incorrect %}
+                                {% widthratio attempt.correct attempt.correct|add:attempt.incorrect 100 %}%
+                            {% else %}
+                                100%
+                            {% endif %}
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'quiz:quiz_results' attempt_id=attempt.id %}" class="list-item-action">Wyniki <i data-feather="eye"></i></a>
                 </div>
-                <div class="list-item-details">
-                    <p><i data-feather="clock"></i> 12 min</p>
-                    <p><i data-feather="calendar"></i> 2 dni temu</p>
-                </div>
-                <div class="list-item-score score-green">92%</div>
-                <a href="#" class="list-item-action">Powtórz <i data-feather="refresh-cw"></i></a>
-            </div>
-            <div class="list-item">
-                <div class="list-item-icon-wrapper icon-purple"><i data-feather="cpu"></i></div>
-                <div class="list-item-content">
-                    <h4>Fizyka Kwantowa</h4>
-                    <p>15 pytań • Trudny poziom</p>
-                </div>
-                <div class="list-item-details">
-                    <p><i data-feather="clock"></i> 18 min</p>
-                    <p><i data-feather="calendar"></i> 5 dni temu</p>
-                </div>
-                <div class="list-item-score score-yellow">78%</div>
-                <a href="#" class="list-item-action">Powtórz <i data-feather="refresh-cw"></i></a>
-            </div>
+            {% empty %}
+                <p style="text-align: center; color: #999; padding: 2rem;">Brak ukończonych podejść. Zacznij od quizu!</p>
+            {% endfor %}
         </div>
     </section>
 
     <section class="section-container column-right">
         <div class="section-header">
-            <h3 class="section-title">Moje Notatki</h3>
-            <button class="btn-icon"><i data-feather="plus"></i></button>
+            <h3 class="section-title">Twoje Osiągnięcia</h3>
         </div>
-        <div class="list">
-            <div class="note-item">
-                <div class="note-color-bar color-yellow"></div>
-                <div class="note-content">
-                    <h4>Matematyka - Pochodne</h4>
-                    <p>Podstawowe wzory i definicje pochodnych funkcji...</p>
-                    <div class="note-footer">
-                        <span><i data-feather="file-text"></i> 12 stron</span>
-                        <span>Wczoraj</span>
+        <div class="achievements-grid">
+            <div class="achievement-card {% if completed_quizzes >= 10 %}achieved{% endif %}">
+                <div class="achievement-header">
+                    <div class="achievement-icon-badge">
+                        <i data-feather="target"></i>
+                    </div>
+                    <div class="achievement-title-section">
+                        <h4>Mistrz Quizów</h4>
+                        <p>Ukończyłeś 10 quizów</p>
                     </div>
                 </div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+                <div class="achievement-footer">
+                    {% if completed_quizzes >= 10 %}
+                        <span class="achievement-badge-success">Zdobyte</span>
+                    {% else %}
+                        <span class="achievement-progress">{{ completed_quizzes }}<span class="progress-target">/10</span></span>
+                    {% endif %}
+                </div>
             </div>
-            <div class="note-item">
-                <div class="note-color-bar color-blue"></div>
-                <div class="note-content">
-                    <h4>Biologia - Komórka</h4>
-                    <p>Budowa i funkcje organelli komórkowych...</p>
-                    <div class="note-footer">
-                        <span><i data-feather="file-text"></i> 8 stron</span>
-                        <span>3 dni temu</span>
+            <div class="achievement-card {% if avg_percentage >= 80 %}achieved{% endif %}">
+                <div class="achievement-header">
+                    <div class="achievement-icon-badge">
+                        <i data-feather="award"></i>
+                    </div>
+                    <div class="achievement-title-section">
+                        <h4>Wybitny Uczeń</h4>
+                        <p>Średni wynik 80% lub wyżej</p>
                     </div>
                 </div>
-                <button class="btn-icon-alt"><i data-feather="more-vertical"></i></button>
+                <div class="achievement-footer">
+                    {% if avg_percentage >= 80 %}
+                        <span class="achievement-badge-success">Zdobyte</span>
+                    {% else %}
+                        <span class="achievement-progress">{{ avg_percentage }}<span class="progress-target">/80%</span></span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="achievement-card {% if learning_days >= 5 %}achieved{% endif %}">
+                <div class="achievement-header">
+                    <div class="achievement-icon-badge">
+                        <i data-feather="activity"></i>
+                    </div>
+                    <div class="achievement-title-section">
+                        <h4>Wytrwały Uczeń</h4>
+                        <p>5 dni aktywności nauki</p>
+                    </div>
+                </div>
+                <div class="achievement-footer">
+                    {% if learning_days >= 5 %}
+                        <span class="achievement-badge-success">Zdobyte</span>
+                    {% else %}
+                        <span class="achievement-progress">{{ learning_days }}<span class="progress-target">/5</span></span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="achievement-card {% if completed_attempts >= 25 %}achieved{% endif %}">
+                <div class="achievement-header">
+                    <div class="achievement-icon-badge">
+                        <i data-feather="zap"></i>
+                    </div>
+                    <div class="achievement-title-section">
+                        <h4>Niezniszczalny</h4>
+                        <p>25 ukończonych podejść</p>
+                    </div>
+                </div>
+                <div class="achievement-footer">
+                    {% if completed_attempts >= 25 %}
+                        <span class="achievement-badge-success">Zdobyte</span>
+                    {% else %}
+                        <span class="achievement-progress">{{ completed_attempts }}<span class="progress-target">/25</span></span>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </section>

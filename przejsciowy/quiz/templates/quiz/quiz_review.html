@@ -1,0 +1,286 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Podsumowanie Quizu - {{ quiz.content }}{% endblock %}
+
+{% block content %}
+<div class="quiz-review-container">
+    <header class="page-header">
+        <div class="review-header-info">
+            <h1><i data-feather="book"></i> Podsumowanie Quizu</h1>
+            <p>{{ quiz.content }}</p>
+        </div>
+    </header>
+
+    <main class="review-main">
+        <div class="review-info-bar">
+            <p><strong>Razem pytań:</strong> {{ total_questions }}</p>
+            <p><strong>Attempt:</strong> #{{ attempt.id }}</p>
+        </div>
+
+        <!-- Pytania z odpowiedziami -->
+        <div class="questions-review-container">
+            {% for question in questions %}
+                <div class="review-question-card">
+                    <div class="question-header">
+                        <span class="question-number">Pytanie {{ forloop.counter }}</span>
+                        <span class="question-stats">ID: {{ question.id }}</span>
+                    </div>
+
+                    <div class="question-text">{{ question.content }}</div>
+
+                    <div class="answers-review-group">
+                        {% for answer in question.answers.all %}
+                            <div class="answer-review-item {% if answer.is_correct %}correct{% endif %}">
+                                <div class="answer-indicator">
+                                    {% if answer.is_correct %}
+                                        <i data-feather="check-circle"></i>
+                                        <span class="answer-label">Poprawna odpowiedź</span>
+                                    {% else %}
+                                        <i data-feather="circle"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="answer-content">{{ answer.content }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Actions -->
+        <div class="review-actions">
+            <a href="{% url 'quiz:quiz_results' attempt_id=attempt.id %}" class="btn btn-primary">
+                <i data-feather="arrow-left"></i> Wróć do wyników
+            </a>
+        </div>
+    </main>
+</div>
+
+<style>
+    .quiz-review-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .review-header-info {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .review-header-info h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .review-header-info p {
+        color: #666;
+        font-size: 1.1rem;
+    }
+
+    .review-main {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+    }
+
+    .review-info-bar {
+        display: flex;
+        gap: 2rem;
+        padding: 1rem;
+        background-color: #f3f4f6;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+    }
+
+    .review-info-bar p {
+        margin: 0;
+        color: #374151;
+    }
+
+    .questions-review-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .review-question-card {
+        padding: 1.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        background-color: #fafafa;
+    }
+
+    .question-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .question-number {
+        display: inline-block;
+        background-color: #2563eb;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .question-stats {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .question-text {
+        font-size: 1.05rem;
+        font-weight: 500;
+        margin: 1rem 0;
+        color: #1f2937;
+        line-height: 1.5;
+    }
+
+    .answers-review-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .answer-review-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background-color: white;
+        transition: all 0.2s;
+    }
+
+    .answer-review-item.correct {
+        background-color: #f0fdf4;
+        border-color: #10b981;
+    }
+
+    .answer-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+        min-width: 120px;
+    }
+
+    .answer-indicator i {
+        width: 20px;
+        height: 20px;
+        color: #10b981;
+    }
+
+    .answer-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #10b981;
+    }
+
+    .answer-review-item:not(.correct) .answer-indicator i {
+        color: #d1d5db;
+    }
+
+    .answer-content {
+        flex: 1;
+        color: #374151;
+        line-height: 1.5;
+    }
+
+    .review-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e5e7eb;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+    }
+
+    @media (max-width: 768px) {
+        .review-info-bar {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .review-main {
+            padding: 1rem;
+        }
+
+        .review-question-card {
+            padding: 1rem;
+        }
+    }
+</style>
+
+<script>
+    /**
+     * Funkcja Fisher-Yates do tasowania tablic
+     */
+    function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    /**
+     * Tasuj odpowiedzi dla każdego pytania
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+        const answerGroups = document.querySelectorAll('.answers-review-group');
+        
+        answerGroups.forEach(group => {
+            // Pobierz wszystkie odpowiedzi
+            const answers = Array.from(group.querySelectorAll('.answer-review-item'));
+            
+            // Tasuj je
+            const shuffledAnswers = shuffleArray(answers);
+            
+            // Wyczyść grupę
+            group.innerHTML = '';
+            
+            // Dodaj tasowane odpowiedzi z powrotem
+            shuffledAnswers.forEach(answer => {
+                group.appendChild(answer);
+            });
+        });
+    });
+</script>
+
+{% endblock %}

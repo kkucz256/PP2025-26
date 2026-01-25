@@ -196,16 +196,30 @@ def create_quiz(request, payload: QuizIn):
 
 @router.delete("/quizzes/{quiz_id}/", response={204: None, 400: dict, 404: dict})
 def delete_quiz(request, quiz_id: int):
-    """Delete a quiz if it has no questions"""
+    """Remove quiz from user's library (delete QuizUser relation)"""
+    from .models import QuizUser
+    
     try:
         quiz = Quiz.objects.get(pk=quiz_id)
     except Quiz.DoesNotExist:
         return 404, {"detail": "Quiz not found"}
 
-    if quiz.questions.exists():
-        return 400, {"detail": "Cannot delete quiz with existing questions"}
+    # Get user_id from request
+    user_id = request.session.get('user_id') or request.query_params.get('user_id')
+    if not user_id:
+        return 400, {"detail": "User ID not provided"}
 
-    quiz.delete()
+    try:
+        user = Users.objects.get(pk=user_id)
+    except Users.DoesNotExist:
+        return 404, {"detail": "User not found"}
+
+    # Delete QuizUser relation instead of entire quiz
+    deleted, _ = QuizUser.objects.filter(quiz=quiz, user=user).delete()
+    
+    if deleted == 0:
+        return 400, {"detail": "Quiz is not in your library"}
+    
     return 204, None
 
 
@@ -403,6 +417,95 @@ def question_stats(request, question_id: int):
         return 404, {"detail": "Question not found"}
 
     return services.get_question_stats(question)
+
+
+@router.get("/quizzes/{quiz_id}/ranking/", response=dict)
+def quiz_ranking(request, quiz_id: int):
+    """Pobierz ranking użytkowników dla konkretnego quizu"""
+    try:
+        quiz = Quiz.objects.get(pk=quiz_id)
+    except Quiz.DoesNotExist:
+        return 404, {"detail": "Quiz not found"}
+    
+    # Pobierz wszystkie ukończone podejścia dla tego quizu
+    completed_attempts = QuizAttempt.objects.filter(
+        quiz=quiz, 
+        end_date__isnull=False
+    ).select_related('user')
+    
+    total_questions = quiz.questions.count()
+    ranking = []
+    
+    # Zgrupuj podejścia po użytkownikach
+    users_stats = {}
+    for attempt in completed_attempts:
+        username = attempt.user.username
+        if username not in users_stats:
+            users_stats[username] = {
+                'user_id': attempt.user_id,
+                'attempts': [],
+            }
+        
+        if attempt.start_date and attempt.end_date:
+            duration = (attempt.end_date - attempt.start_date).total_seconds() / 60
+        else:
+            duration = 0
+        
+        percentage = 0
+        if total_questions > 0:
+            percentage = round((attempt.correct / total_questions) * 100, 2)
+        
+        users_stats[username]['attempts'].append({
+            'correct': attempt.correct,
+            'incorrect': attempt.incorrect,
+            'percentage': percentage,
+            'duration': round(duration, 1),
+            'date': attempt.end_date.isoformat() if attempt.end_date else None,
+        })
+    
+    # Oblicz statystyki dla każdego użytkownika
+    for username, data in users_stats.items():
+        attempts = data['attempts']
+        
+        # Średni wynik
+        avg_correct = sum(a['correct'] for a in attempts) / len(attempts)
+        avg_percentage = round((avg_correct / total_questions) * 100, 2) if total_questions > 0 else 0
+        
+        # Średni czas
+        durations = [a['duration'] for a in attempts]
+        avg_duration = round(sum(durations) / len(durations), 1) if durations else 0
+        best_duration = round(min(durations), 1) if durations else 0
+        
+        ranking.append({
+            'username': username,
+            'user_id': data['user_id'],
+            'attempts_count': len(attempts),
+            'avg_percentage': avg_percentage,
+            'avg_duration': avg_duration,
+            'best_duration': best_duration,
+            'best_percentage': max(a['percentage'] for a in attempts),
+        })
+    
+    return {
+        'quiz_id': quiz_id,
+        'quiz_name': quiz.content,
+        'total_questions': total_questions,
+        'ranking': ranking,
+    }
+
+
+@router.get("/users/", response=list)
+def get_all_users(request):
+    """Get list of all users (for sharing quizzes), excluding current user"""
+    user_id = request.session.get('user_id') or request.query_params.get('exclude_user_id')
+    
+    users = Users.objects.all().values('id', 'username')
+    
+    # Exclude current user
+    if user_id:
+        users = users.exclude(id=user_id)
+    
+    return list(users)
 
 
 api.add_router("/quiz/", router)

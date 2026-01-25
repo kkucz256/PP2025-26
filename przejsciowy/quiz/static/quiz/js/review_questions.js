@@ -381,11 +381,10 @@ async function saveQuiz(event) {
         showLoading(false);
         showSuccess(`Quiz "${quizName}" został pomyślnie zapisany!`);
         
-        // Wyczyść session i przekieruj
         sessionStorage.removeItem('temp_questions');
         
         setTimeout(() => {
-            window.location.href = '/quiz/my-quizzes/';
+            window.location.href = '../my-quizzes';
         }, 1500);
         
     } catch (error) {

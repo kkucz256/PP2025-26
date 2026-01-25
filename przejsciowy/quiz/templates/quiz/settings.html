@@ -1,0 +1,238 @@
+{% extends 'quiz/base.html' %}
+
+{% block title %}Ustawienia - QuizMaster{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <div class="greeting">
+        <h1>Ustawienia</h1>
+        <p>Zarządzaj swoim kontem i preferencjami</p>
+    </div>
+</header>
+
+{% if success_message %}
+    <div class="alert alert-success">
+        <i data-feather="check-circle"></i>
+        {{ success_message }}
+    </div>
+{% endif %}
+
+{% if error_message %}
+    <div class="alert alert-error">
+        <i data-feather="alert-circle"></i>
+        {{ error_message }}
+    </div>
+{% endif %}
+
+<div class="settings-container">
+    <!-- Zmiana Nazwy Użytkownika -->
+    <section class="settings-card">
+        <div class="settings-header">
+            <div class="settings-icon"><i data-feather="user"></i></div>
+            <div class="settings-title">
+                <h3>Nazwa użytkownika</h3>
+                <p>Zmień swoją publiczną nazwę</p>
+            </div>
+        </div>
+        <form method="POST" class="settings-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="change_username">
+            <div class="form-group">
+                <label>Obecna nazwa: <strong>{{ user.username }}</strong></label>
+                <input type="text" name="new_username" placeholder="Nowa nazwa użytkownika" required minlength="3" maxlength="100">
+                <small>Musi mieć co najmniej 3 znaki</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Zmień nazwę</button>
+        </form>
+    </section>
+
+    <!-- Zmiana Email -->
+    <section class="settings-card">
+        <div class="settings-header">
+            <div class="settings-icon"><i data-feather="mail"></i></div>
+            <div class="settings-title">
+                <h3>Adres email</h3>
+                <p>Zaktualizuj swój adres email</p>
+            </div>
+        </div>
+        <form method="POST" class="settings-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="change_email">
+            <div class="form-group">
+                <label>Obecny email: <strong>{{ user.mail }}</strong></label>
+                <input type="email" name="new_email" placeholder="Nowy adres email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Zmień email</button>
+        </form>
+    </section>
+
+    <!-- Zmiana Hasła -->
+    <section class="settings-card">
+        <div class="settings-header">
+            <div class="settings-icon"><i data-feather="lock"></i></div>
+            <div class="settings-title">
+                <h3>Hasło</h3>
+                <p>Zmień swoje hasło, aby zachować bezpieczeństwo</p>
+            </div>
+        </div>
+        <form method="POST" class="settings-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="change_password">
+            <div class="form-group">
+                <label for="old_password">Obecne hasło</label>
+                <input type="password" id="old_password" name="old_password" placeholder="Wpisz obecne hasło" required>
+            </div>
+            <div class="form-group">
+                <label for="new_password">Nowe hasło</label>
+                <input type="password" id="new_password" name="new_password" placeholder="Wpisz nowe hasło" required minlength="6">
+                <small>Musi mieć co najmniej 6 znaków</small>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Powtórz hasło</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Powtórz nowe hasło" required minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primary">Zmień hasło</button>
+        </form>
+    </section>
+</div>
+
+<style>
+.settings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.settings-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.settings-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.settings-header {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.settings-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f5f9;
+    border-radius: 10px;
+    color: #6a5af9;
+}
+
+.settings-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.settings-title p {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-group input {
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #6a5af9;
+    box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.1);
+}
+
+.form-group small {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #6a5af9;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #5a4acc;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(106, 90, 249, 0.3);
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+}
+
+.alert-success {
+    background-color: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #166534;
+}
+
+.alert-error {
+    background-color: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+
+.alert i {
+    width: 20px;
+    height: 20px;
+}
+</style>
+{% endblock %}

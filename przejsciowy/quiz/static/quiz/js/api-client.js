@@ -221,6 +221,15 @@ class QuizAPI {
     async getQuestionStats(questionId) {
         return this.request(`/questions/${questionId}/stats/`);
     }
+
+    // ============ USER OPERATIONS ============
+
+    /**
+     * Get all users
+     */
+    async getAllUsers() {
+        return this.request('/users/');
+    }
 }
 
 // Export for use

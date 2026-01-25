@@ -1,0 +1,396 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Rozwiąż Quiz - {{ quiz.content }}{% endblock %}
+
+{% block content %}
+<div class="quiz-attempt-container">
+    <header class="page-header">
+        <div class="quiz-header-info">
+            <h1><i data-feather="help-circle"></i> {{ quiz.content }}</h1>
+            <p>Pytań: <strong>{{ total_questions }}</strong></p>
+        </div>
+        <div class="progress-bar-wrapper">
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <span id="progress-text" class="progress-text">Pytanie 1 z {{ total_questions }}</span>
+        </div>
+    </header>
+
+    <main class="quiz-main">
+        <form id="quiz-form" class="quiz-form">
+            <!-- Pytania będą dodane dynamicznie tutaj -->
+            <div id="questions-container" class="questions-container"></div>
+
+            <div class="quiz-actions">
+                <button type="button" class="btn btn-secondary" onclick="history.back()">
+                    <i data-feather="arrow-left"></i> Wróć
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i data-feather="check"></i> Prześlij Odpowiedzi
+                </button>
+            </div>
+        </form>
+
+        <!-- Loading -->
+        <div id="loading" class="loading-spinner" style="display: none;">
+            <p>Przesyłanie odpowiedzi...</p>
+        </div>
+    </main>
+</div>
+
+<style>
+    .quiz-attempt-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .quiz-header-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .quiz-header-info h1 {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .page-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .progress-bar-wrapper {
+        margin-top: 2rem;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #2563eb, #1d4ed8);
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .quiz-main {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .quiz-form {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .questions-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .question-item {
+        padding: 1.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        transition: border-color 0.2s;
+    }
+
+    .question-item:hover {
+        border-color: #2563eb;
+    }
+
+    .question-item.active {
+        border-color: #2563eb;
+        background-color: #f0f9ff;
+    }
+
+    .question-number {
+        display: inline-block;
+        background-color: #2563eb;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .question-text {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin: 1rem 0;
+        color: #1f2937;
+    }
+
+    .answers-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .answer-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .answer-option:hover {
+        background-color: #f9fafb;
+        border-color: #2563eb;
+    }
+
+    .answer-option input[type="radio"] {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+    }
+
+    .answer-option label {
+        flex: 1;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .quiz-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e5e7eb;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+    }
+
+    .btn-secondary {
+        background-color: #6b7280;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #4b5563;
+    }
+
+    .loading-spinner {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+    }
+</style>
+
+<script src="{% static 'quiz/js/api-client.js' %}"></script>
+<script>
+    const API = new QuizAPI('/api/quiz', '{{ csrf_token }}');
+    const ATTEMPT_ID = {{ attempt_id }};
+    const USER_ID = {{ request.session.user_id|default:'null' }};
+    let questions = [];
+
+    document.addEventListener('DOMContentLoaded', loadQuizQuestions);
+
+    /**
+     * Funkcja Fisher-Yates do tasowania tablic
+     */
+    function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    /**
+     * Załaduj pytania quizu
+     */
+    async function loadQuizQuestions() {
+        try {
+            // Pobierz ID quizu z URL-u lub z widoku
+            const quizId = {{ quiz.id }};
+            const quiz = await API.getQuiz(quizId);
+            questions = quiz.questions || [];
+
+            if (questions.length === 0) {
+                alert('Quiz nie ma pytań!');
+                window.location.href = '{% url "quiz:my_quizzes" %}';
+                return;
+            }
+
+            // Tasuj pytania
+            questions = shuffleArray(questions);
+            
+            // Tasuj odpowiedzi dla każdego pytania
+            questions.forEach(question => {
+                if (question.answers) {
+                    question.answers = shuffleArray(question.answers);
+                }
+            });
+
+            renderQuestions();
+        } catch (error) {
+            console.error('Błąd ładowania pytań:', error);
+            alert('Błąd ładowania pytań');
+        }
+    }
+
+    /**
+     * Renderuj wszystkie pytania
+     */
+    function renderQuestions() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = '';
+
+        questions.forEach((question, idx) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-item';
+            questionDiv.setAttribute('data-question-id', question.id);
+
+            const answersHtml = (question.answers || []).map((answer, ansIdx) => `
+                <div class="answer-option">
+                    <input type="radio" 
+                           id="q${question.id}_a${answer.id}" 
+                           name="question_${question.id}" 
+                           value="${answer.id}"
+                           required>
+                    <label for="q${question.id}_a${answer.id}">${escapeHtml(answer.content)}</label>
+                </div>
+            `).join('');
+
+            questionDiv.innerHTML = `
+                <span class="question-number">Pytanie ${idx + 1}</span>
+                <div class="question-text">${escapeHtml(question.content)}</div>
+                <div class="answers-group">
+                    ${answersHtml}
+                </div>
+            `;
+
+            container.appendChild(questionDiv);
+        });
+
+        updateProgressBar();
+    }
+
+    /**
+     * Zaktualizuj pasek postępu
+     */
+    function updateProgressBar() {
+        const form = document.getElementById('quiz-form');
+        const answeredCount = form.querySelectorAll('input[type="radio"]:checked').length;
+        const totalQuestions = questions.length;
+        const percentage = (answeredCount / totalQuestions) * 100;
+
+        document.getElementById('progress-fill').style.width = percentage + '%';
+        document.getElementById('progress-text').textContent = 
+            `${answeredCount} z ${totalQuestions} odpowiedzianych`;
+    }
+
+    /**
+     * Prześlij odpowiedzi
+     */
+    document.getElementById('quiz-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Sprawdź czy wszystkie pytania mają odpowiedzi
+        const form = document.getElementById('quiz-form');
+        const unanswered = questions.filter(q => !form.querySelector(`input[name="question_${q.id}"]:checked`));
+
+        if (unanswered.length > 0) {
+            alert(`Proszę odpowiedzieć na wszystkie pytania! Brakuje ${unanswered.length} odpowiedzi.`);
+            return;
+        }
+
+        // Przygotuj dane odpowiedzi
+        const answers = questions.map(question => {
+            const selectedAnswerId = form.querySelector(`input[name="question_${question.id}"]:checked`)?.value;
+            const selectedAnswerIds = selectedAnswerId ? [parseInt(selectedAnswerId)] : [];
+
+            return {
+                question_id: question.id,
+                selected_answer_ids: selectedAnswerIds
+            };
+        });
+
+        showLoading(true);
+
+        try {
+            const result = await API.submitAttempt(ATTEMPT_ID, answers);
+
+            // Zapisz wynik w sessionStorage
+            sessionStorage.setItem('quiz_result', JSON.stringify(result));
+
+            // Przekieruj do strony wyników
+            window.location.href = `/quiz-results/${ATTEMPT_ID}/`;
+        } catch (error) {
+            console.error('Błąd przesyłania odpowiedzi:', error);
+            alert('Błąd przesyłania odpowiedzi: ' + error.message);
+            showLoading(false);
+        }
+    });
+
+    /**
+     * Śledzenie zmian w formularzu do aktualizacji paska postępu
+     */
+    document.getElementById('quiz-form').addEventListener('change', updateProgressBar);
+
+    /**
+     * Pokaż/ukryj loading
+     */
+    function showLoading(show) {
+        document.getElementById('loading').style.display = show ? 'block' : 'none';
+    }
+
+    /**
+     * Escape HTML
+     */
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+
+{% endblock %}
